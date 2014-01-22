@@ -1,0 +1,12 @@
+[
+    {
+        "title": "AOP Proxies as a Replacement for Events",
+        "description": "Communication between two application modules is typically handled with events. Proxies provide a means to replace events, while offering other benefits.",
+       	"tags": ["HTML5", "CSS", "JavaScript", "Angular JS", "Backbone JS"]
+    },
+    {
+        "title": "The Semantic and Syntactic Implications of JavaScript Accessor Properties",
+        "description": "Accessor properties will change the way you write and comprehend JavaScript.",
+       	"tags": ["HTML5", "CSS", "JavaScript", "Angular JS", "Backbone JS"]
+    }
+]

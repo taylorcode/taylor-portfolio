@@ -1,0 +1,6 @@
+<figure>
+	<img ng-click="clickImage(currentImage); $event.stopPropagation()" ng-src="{{imageDir + currentImage.src}}">
+	<div ng-if="currentImage.caption">
+		<figcaption>{{currentImage.caption}}</figcaption>
+	</div>
+</figure>

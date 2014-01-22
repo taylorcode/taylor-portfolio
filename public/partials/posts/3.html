@@ -1,0 +1,116 @@
+Oftentimes it is necessary to communicate across modules, or functional units, that some property was changed.
+
+Surely, if your application utilizes two-way data-binding by default, syncing up data and responses is rather easy. 
+
+Therefore, this example is more for learning (or if you would like to build your own framework) rather than for direct practical application.
+
+
+Example: Perhaps the developer has established client-side long-polling within a controller to check if a user is still logged in. 
+
+The response object contains information about the user's session, indicating whether it is expired or not.
+
+This settings object is then conveyed to one or several views, so they can respond accordingly.
+
+A primative example of a common solution, is to modify the controller's source to pass data directly to the view(s):
+
+<pre>
+  <code class="coffeescript">getUserSettings().done (settings) ->
+   
+    App.views.loggedInView.updateView settings
+
+    getUserSettings()</code>
+</pre>
+
+
+This solution however is rather messy. It creates unnecessary connections between functional units, and it is difficult to maintain intellectual comprehension of the application as it grows in size.
+It is also difficult to test, for the invocations must be stubbed.
+
+Another approach is to use events:
+
+<pre>
+  <code class="coffeescript">getUserSettings().done (settings) ->
+
+    eventsAggregator.publish 'updateView', settings
+
+    getUserSettings()</code>
+</pre>
+
+Events are not preferred either because they still require modification of the source, among many other reasons detailed in my last post, "AOP proxies to replace events"
+
+Enter JavaScript Accessor Properties
+
+
+JavaScript accessor properties allow the developer to execute hidden functions when a property is accessed, or assigned a value. 
+
+I won't go too much into detail as there is quite a bit of literature already written about accessor properties, and if you are unfamiliar, read John Resigs post, "Accessor methods of things"
+
+Our end goal is to allow the views to automatically respond when the controller's settings object is changed, without modifying the source of either the controller or the views. These functional units should operate completelely independently, and  
+
+This is achieved with a technique similar to proxies for methods, but instead of proxying a method, we are proxying a simple value property.
+  <pre>
+    <code class="coffeescript">watchProperty = (obj, prop, adviceContext, adviceProp) ->
+      
+  value = obj[prop]
+
+  Object.defineProperty obj, prop,
+    get: ->
+      value
+    set: (newValue) ->
+      value = newValue
+      adviceContext[adviceProp].call adviceContext, 
+                                     newValue
+
+watchProperty App.controllers.userProfile, 'settings', 
+              App.views.loggedInView, 'updateView'</code>
+</pre>
+
+
+This is a rather rudimentary implementation, but it illustrates the concept fairly well.
+
+We are essentially adding "advice" to the setter of our <span class="code">userProfile.settings</span> property.
+The advice is to invoke the loggedInView's method, updateView, in the context of the view itself with the new settings object.
+
+Now, when the settings property is updated on the controller, the view will update automatically.
+
+<pre>
+  <code class="coffeescript">getSettingsResource().done (response) ->
+    App.controllers.userProfile.settings = response</code>
+</pre>
+
+
+
+Another case I considered is the use of the setter as a replacement for inheritence syntax. This is a rather specific example, although the same approach can be applied for any object methods... NOT GOOD 
+
+
+This doesn't improve the capability of the language, but it may improve readability and comprehension:
+
+var myObject = new AccessorObject
+
+myObject.inheritsFrom = parentObject;
+myObject.extends = otherObjectA;
+myObject.extends = otherObjectB;
+
+The last use case I find signiciant at the moment is to us accessor properties in a proxy fashion, to add additional behaviour or "advice" when properties are accessed or assigned.
+
+ <pre>
+    <code class="coffeescript">
+
+watchProperty = (obj, prop, adviceContext, adviceProp) ->
+      
+  value = obj[prop]
+
+  Object.defineProperty obj, prop,
+    get: ->
+      value
+    set: (newValue) ->
+      value = newValue
+      adviceContext[adviceProp].call adviceContext, 
+                                     newValue
+
+watchProperty App.controllers.userProfile, 'settings', 
+              App.views.loggedInView, 'updateView'</code>
+</pre>
+
+
+In this example, we can unobtrusively listen for the change in BLAH
+    

@@ -1,0 +1,41 @@
+<div id="intro">
+    <h1>design for use.</h1>
+    <h3>Most of the world designs for looks. I design for use.</h3>
+</div>
+
+<div id="tags" ng-controller="Tags">
+    <div tags></div>
+    <section>
+        <p>These tags are from a project I am working on called SmartTags.</p>
+    </section>
+</div>
+<div id="projects" ng-controller="Projects">
+
+<!--     AREA{{area}}
+
+    <input type="text" ng-model="l"> -->
+
+    <div ng-if="selectedProject" image-modal="selectedProject.images" image-dir="assets/images/projects/{{selectedProject.imageDir}}/" current-image="selectedProject.currentImage" ng-click="closeImageModal()"></div>
+
+
+    <div ng-if="selectedVideo" video-modal="selectedVideo" video-dir="//www.youtube.com/embed/" ng-click="closeVideoModal()"></div>
+
+    <h2>My Work</h2>
+    <article ng-repeat="p in projects">
+        <div image-slider="p.images" current-image="p.currentImage" image-dir="assets/images/projects/{{p.imageDir}}/" ng-mouseup="selectProject(p)"></div>
+        <section>
+            <h3>{{p.title}}</h3>
+            <p>{{p.content}}</p>
+            <a ng-if="p.videos" ng-repeat="video in p.videos" ng-click="selectVideo(video.id)">{{video.link || 'Video Demo'}}</a>
+        </section>
+        <div tags="p.tags"></div>
+    </article>
+</div>
+<div id="blog" ng-controller="Blog">
+    <h2>My Blog</h2>
+    <article ng-repeat="p in posts">
+        <h3><a ng-href="#/post/{{$index}}#disqus_thread">{{p.title}}</a></h3>
+        <p>{{p.description}}</p>
+        <div tags="p.tags"></div>
+    </article>
+</div>

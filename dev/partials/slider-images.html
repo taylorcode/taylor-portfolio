@@ -1,0 +1,13 @@
+<nav ng-click="$event.stopPropagation()">
+	<a ng-class="{disabled: nextDisabled}" ng-mouseup="nextImage(); $event.stopImmediatePropagation()"></a>
+	<a ng-class="{disabled: prevDisabled}" ng-mouseup="prevImage(); $event.stopImmediatePropagation()"></a>
+</nav>
+
+<ul>
+    <li ng-repeat="img in images" ng-class="{current: img == currentImage, old: img == images[images.indexOf(currentImage) - 1]}">
+        <figure>
+            <img ng-src="{{imageDir + img.src}}" ng-swipe-right="prevImage(); $event.stopImmediatePropagation()" ng-swipe-left="nextImage(); $event.stopImmediatePropagation()">
+            <!-- <figcaption>{{img.caption}}</figcaption> -->
+        </figure>
+    </li>
+</ul>

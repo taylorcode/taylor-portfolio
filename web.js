@@ -16,7 +16,7 @@ mongoose.connect('mongodb://localhost/jobagrob', function (err) {
 
 */
 app.configure(function() {
-  app.use(express.static('public'));
+  app.use(express.static('dev'));
   //app.use(express.cookieParser());
   app.use(express.bodyParser());
   //app.use(express.session({ secret: 'keyboard cat' }));

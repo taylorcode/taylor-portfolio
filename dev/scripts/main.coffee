@@ -1,7 +1,8 @@
+
 window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch']) #maybe include ngRetina
 
 .run (monitorScroll) ->
-	console.log ''
+	log 'application started.'
 
 .config ($routeProvider) ->
 	$routeProvider
@@ -9,7 +10,7 @@ window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch']) #maybe in
 	.otherwise templateUrl: '/partials/home.html'
 
 .controller 'Tags', ($scope, tagBank) ->
-	console.log ''
+	log 'tags controller loaded.'
 
 .controller 'Projects', ($scope, $http) ->
 
@@ -124,16 +125,19 @@ window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch']) #maybe in
 	restrict: 'A'
 	scope:
 		tags: '='
+		showTags: '@'
 	templateUrl: 'partials/tags.html'
 	controller: ($scope) ->
 		#convert to keyed object
-		if not $scope.tags
-			$scope.tagList = tagBank.savedTags
-		else
-			$scope.tagList = _.map $scope.tags, (tag) ->
-				foundTag = tagBank.find tag
-				foundTag = tagBank.add tag if not foundTag
-				foundTag
+
+		$scope.$watch 'tags', (tags) ->
+			if tags
+				$scope.tagList = _.map tags, (tag) ->
+					foundTag = tagBank.find tag
+					foundTag = tagBank.add tag if not foundTag
+					foundTag
+
+		$scope.tagList = tagBank.savedTags if $scope.showTags
 
 		$scope.activateTag = (tag) ->
 			return tag.selected = true if not tag.selected

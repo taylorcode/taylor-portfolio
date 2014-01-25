@@ -44,9 +44,19 @@
 
 <script src="http://yandex.st/highlightjs/7.5/highlight.min.js"></script>
 
-<!-- build:script bundle -->
+<!-- build:process -->
+<script>
+(function () {
+
+    if('<%= environment %>' === 'dev') return window.log = console.log.bind(console);
+    window.log = function () {};
+
+}).call(this);
+</script>
 <!-- /build -->
 
+<!-- build:script bundle -->
+<!-- /build -->
 
 <!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>

@@ -14,11 +14,12 @@
             }
         ],
         "tags": [
-            "Rapid Prototyping",
             "Backbone + Marionette",
-            "SASS",
-            "Handlebars",
-            "Mercurial"
+            "Agile Development",
+            "Jasmine",
+            "Mercurial",
+            "Rapid Prototyping",
+            "SASS + Compass"
         ]
     },
     {
@@ -26,6 +27,9 @@
         "imageDir": "jobagrob",
         "content": "Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content.",
         "images": [
+            {
+                "src": "jobagrob-display.png"
+            },
             {
                 "src": "apply-for-job.jpg"
             },
@@ -64,13 +68,13 @@
             }
         ],
         "tags": [
-            "HTML5",
-            "CSS",
-            "JavaScript",
             "Angular JS",
-            "Backbone JS",
-            "CatFood",
-            "FunStuff"
+            "Node",
+            "Mongo DB",
+            "Mongoose",
+            "SASS + Compass",
+            "Heroku",
+            "Grunt"
         ]
     },
     {
@@ -78,6 +82,9 @@
         "content": "Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content.",
         "imageDir": "whippex",
         "images": [
+            {
+                "src": "whippex-display.png"
+            },
             {
                 "src": "admin-mobile.jpg"
             },
@@ -134,13 +141,9 @@
             "id": "kKZMGQJv3Rc"
         }],
         "tags": [
-            "HTML5",
-            "CSS",
-            "JavaScript",
             "Angular JS",
-            "Backbone JS",
-            "CatFood",
-            "FunStuff"
+            "PHP PDO",
+            "mySQL"
         ]
     },
     {
@@ -148,6 +151,9 @@
         "content": "Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content.",
         "imageDir": "eventuall",
         "images": [
+            {
+                "src": "eventuall-display.jpg"
+            },
             {
                 "src": "add-new-event.jpg"
             },
@@ -165,13 +171,9 @@
             "id": "PoK1YQV6k-4"
         }],
         "tags": [
-            "HTML5",
-            "CSS",
-            "JavaScript",
-            "Angular JS",
-            "Backbone JS",
-            "CatFood",
-            "FunStuff"
+            "States.js",
+            "PHP PDO",
+            "mySQL"
         ]
     },
     {
@@ -179,6 +181,9 @@
         "content": "Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content.",
         "imageDir": "ugs",
         "images": [
+            {
+                "src": "ugs-display.jpg"
+            },
             {
                 "src": "login.jpg"
             },
@@ -195,9 +200,6 @@
                 "src": "add-event-mobile.jpg"
             },
             {
-                "src": "quickprint-pricing.jpg"
-            },
-            {
                 "src": "create-product-mobile.jpg"
             },
             {
@@ -208,9 +210,6 @@
             },
             {
                 "src": "sort-agenda-items-mobile.jpg"
-            },
-            {
-                "src": "edit-data-items.jpg"
             },
             {
                 "src": "sort-task-items.jpg"
@@ -256,13 +255,9 @@
             "id": "xbbv45Xv-M4"
         }],
         "tags": [
-            "HTML5",
-            "CSS",
-            "JavaScript",
-            "Angular JS",
-            "Backbone JS",
-            "CatFood",
-            "FunStuff"
+            "States.js",
+            "PHP PDO",
+            "mySQL"
         ]
     },
     {
@@ -270,6 +265,9 @@
         "content": "Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content.",
         "imageDir": "dillon",
         "images": [
+            {
+                "src": "dillon-display.png"
+            },
             {
                 "src": "about-page.jpg"
             },
@@ -308,13 +306,9 @@
             "id": "9X5hUS5z0xU"
         }],
         "tags": [
-            "HTML5",
-            "CSS",
-            "JavaScript",
-            "Angular JS",
-            "Backbone JS",
-            "CatFood",
-            "FunStuff"
+            "States.js",
+            "PHP PDO",
+            "mySQL"
         ]
     },
     {
@@ -322,6 +316,9 @@
         "content": "Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content.",
         "imageDir": "portfolio",
         "images": [
+            {
+                "src": "portfolio-display.png"
+            },
             {
                 "src": "plugins.jpg"
             },
@@ -336,13 +333,7 @@
             "id": "aLFCICzXd8c"
         }],
         "tags": [
-            "HTML5",
-            "CSS",
-            "JavaScript",
-            "Angular JS",
-            "Backbone JS",
-            "CatFood",
-            "FunStuff"
+            "States.js"
         ]
     },
     {
@@ -350,6 +341,9 @@
         "content": "Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content.",
         "imageDir": "electric",
         "images": [
+            {
+                "src": "electric-display.gif"
+            },
             {
                 "src": "gallery-page.jpg"
             },
@@ -373,13 +367,7 @@
             "id": "tyaCI15xdQo"
         }],
         "tags": [
-            "HTML5",
-            "CSS",
-            "JavaScript",
-            "Angular JS",
-            "Backbone JS",
-            "CatFood",
-            "FunStuff"
+            "States.js"
         ]
     }
 ]

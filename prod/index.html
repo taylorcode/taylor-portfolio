@@ -31,6 +31,14 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
         <!-- plugins -->
         <script src="http://yandex.st/highlightjs/7.5/highlight.min.js"></script>
+        <script>
+            (function() {
+
+                if ('prod' === 'dev') return window.log = console.log.bind(console);
+                window.log = function() {};
+
+            }).call(this);
+        </script>
         <script type="text/javascript" src="app.min.js"></script>
         <!--[if lt IE 9]>
             <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>

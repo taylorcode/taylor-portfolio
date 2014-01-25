@@ -10,11 +10,7 @@
 $lighter-gray: #F0F0F0
 $light-gray: #E2E2E2
 $dark-gray: #505050
-$screen-width: 960px
 $golden-ratio: 1.618033
-$small-golden-ratio: $golden-ratio - 1
-$small-screen-golden: $screen-width - $screen-width / $golden-ratio
-$large-screen-golden: $screen-width / $golden-ratio
 
 body, body *
 	margin: 0
@@ -51,6 +47,7 @@ p
 a[href]
 	color: black
 
+
 body
 	*
 		overflow: hidden
@@ -59,7 +56,7 @@ body
 	font-size: 16px
 	>
 		*
-			width: $screen-width
+			width: 960px
 			margin: 0 auto
 		header
 			margin-top: 30px
@@ -98,12 +95,15 @@ body
 	margin: 100px 0 60px 0
 	h3
 		font-family: Lustria
+		margin-left: 12px
 
 #tags
 	margin-bottom: 70px
 	section
 		margin-top: 20px
 	[tags]
+		font-size: 14px
+		font-weight: 300
 		ul
 			list-style-type: none
 			margin: -3px
@@ -150,7 +150,7 @@ body
 					border-bottom-color: #4194E0
 		[tags]
 			text-transform: uppercase
-			margin-top: 20px
+			margin-top: 12px
 			ul
 				list-style-type: none
 				margin: 0 -4px
@@ -171,6 +171,8 @@ body
 		margin-bottom: 30px
 	[tags]
 		margin-bottom: 40px
+	[ng-include] ul
+		font-family: Lustria
 
 #projects
 	[image-modal], [video-modal]
@@ -220,40 +222,40 @@ body
 					left: 0
 					top: 0
 
-	img
-		cursor: pointer
-		&:hover
-			opacity: .95
-
 	article
 		[image-slider]
 			float: right
-			margin-left: 20px
+			width: ($golden-ratio - 1) / $golden-ratio * 100%
+			margin-left: 58px
+			overflow: visible
+			> div
+				overflow: visible
 			nav
 				float: left
-				a
-					width: 0
-					height: 0
-					border-style: solid
-					line-height: 0
-					cursor: pointer
-					display: block
-					margin: 10px
-					&:first-child
+				margin-left: -38px
+				div
+					a
+						width: 0
+						height: 0
+						border-style: solid
+						line-height: 0
+						cursor: pointer
+						display: block
+						margin: 6px 15px
+					&:first-child a
 						border-color: transparent
 						border-left-color: $dark-gray
 						border-width: 5px 0 5px 8.7px
 						&.disabled
 							border-left-color: $light-gray
-					&:last-child
+					&:last-child a
 						border-color: transparent
 						border-right-color: $dark-gray
 						border-width: 5px 8.7px 5px 0
 						&.disabled
 							border-right-color: $light-gray
 			ul
-				width: $small-screen-golden
-				padding-bottom: $small-golden-ratio * 100%
+				padding-bottom: 66.2% //($golden-ratio - 1) * 100% :-( FUCK
 				white-space: nowrap
 				display: block
 				position: relative
@@ -274,10 +276,14 @@ body
 					img
 						width: 100%
 						-webkit-user-drag: none
+						&:hover
+							opacity: .95
+	img
+		cursor: pointer
 
 #blog, #post
 	article
-		width: $large-screen-golden
+		width: ($golden-ratio - 1) * 100%
 		ol, ul
 			overflow: visible
 			margin-left: 20px
@@ -300,7 +306,7 @@ body
 	h3
 		font-size: 30px
 		font-weight: 400
-		margin-bottom: 10px
+		margin-bottom: 12px
 		margin-top: 5px
 	h4
 		font-size: 22px
@@ -319,12 +325,23 @@ body
 	position: relative
 
 
+
+@media all and (min-width: 1201px) and (max-width: 1400px)
+	body > *
+		width: 1020px
+
+@media all and (min-width: 1401px)
+	body > *
+		width: 1080px
+
+
+
 @media all and (max-width: 500px)
 
 	body
 		*
 			overflow: hidden
-		font-size: 14px
+		font-size: 13px
 		>
 			*
 				width: auto
@@ -335,25 +352,28 @@ body
 		letter-spacing: -2px
 
 	h2
-		font-size: 22px
+		font-size: 25px
 		border-bottom: 2px solid $light-gray
 		padding-bottom: 10px
 		margin-bottom: 20px
 		letter-spacing: -1px
 
 	h3
-		font-size: 18px
+		font-size: 21px
 
 	#intro
 		margin: 0 0 30px 0
+		h1
+			margin-bottom: 15px
+		h3
+			margin-left: 8px
 
 	#tags
-		margin-bottom: 50px
+		display: none
 
 	#projects, #blog
 		h3
 			margin-top: 15px
-			margin-bottom: 5px
 
 	#projects
 		article
@@ -361,18 +381,35 @@ body
 				float: none
 				margin-left: 0
 				position: relative
+				width: auto
 				nav
+					margin-left: 0
 					position: absolute
-					background: white
-					opacity: .5
 					bottom: 0
 					width: 100%
 					z-index: 1
 					float: none
 					text-align: center
+					height: 100%
+					div
+						&:before
+							content: ''
+							display: inline-block
+							height: 100%
+							vertical-align: middle
+						background-color: rgba(255, 255, 255, 0.3)
+						height: 100%
+						&:first-child
+							float: right
+						&:last-child
+							float: left
+						a
+							display: inline-block
+							vertical-align: middle
+
 				ul
 					width: auto
-	#blog
+	#blog, #post
 		article
 			width: auto
 

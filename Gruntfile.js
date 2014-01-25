@@ -45,7 +45,10 @@ module.exports = function (grunt) {
                         bundle: [
                             '<%= cssPath %>'
                         ]
-                    }
+                    },
+		            data: {
+		                environment: 'dev'
+		            }
                 }
             },
             prod: {
@@ -63,7 +66,10 @@ module.exports = function (grunt) {
                         bundle: [
                             '<%= prodResourcePath %>/**/*.css'
                         ]
-                    }
+                    },
+		            data: {
+		                environment: 'prod'
+		            }
                 }
             }
         }
@@ -71,7 +77,7 @@ module.exports = function (grunt) {
 
     // load all tasks declared in devDependencies
     Object.keys(require('./package.json').devDependencies).forEach(function (dep) {
-        if (dep.substring(0, 6) == "grunt-") {
+        if (dep.substring(0, 6) == 'grunt-') {
             grunt.loadNpmTasks(dep);
         }
     });

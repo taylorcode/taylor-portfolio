@@ -2,13 +2,17 @@
 (function() {
   window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch']).run(function(monitorScroll) {
     return log('application started.');
-  }).config(function($routeProvider) {
+  }).config(function($routeProvider, $locationProvider) {
     return $routeProvider.when('/post/:postId', {
       templateUrl: 'partials/post.html',
       controller: 'Post'
     }).otherwise({
       templateUrl: '/partials/home.html'
     });
+  }).controller('Header', function($scope, $location) {
+    return $scope.scrollTo = function(id) {
+      return $location.hash(id);
+    };
   }).controller('Tags', function($scope, tagBank) {
     return log('tags controller loaded.');
   }).controller('Projects', function($scope, $http) {

@@ -4,10 +4,15 @@ window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch']) #maybe in
 .run (monitorScroll) ->
 	log 'application started.'
 
-.config ($routeProvider) ->
+.config ($routeProvider, $locationProvider) ->
 	$routeProvider
 	.when('/post/:postId', templateUrl: 'partials/post.html', controller: 'Post')
 	.otherwise templateUrl: '/partials/home.html'
+	#$locationProvider.html5Mode true
+
+.controller 'Header', ($scope, $location) ->
+  $scope.scrollTo = (id) ->
+  	$location.hash id
 
 .controller 'Tags', ($scope, tagBank) ->
 	log 'tags controller loaded.'

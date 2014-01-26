@@ -9,15 +9,24 @@
     </head>
     
     <body ontouchstart>
-        <header>
-            <figure on-scroll="background-position-y" factor="-.6"> <a href="#">Taylor Code</a>
+        <div class="colors"> <span></span>
+ <span></span>
+ <span></span>
+ <span></span>
+
+        </div>
+        <header ng-controller="Header">
+            <figure> <a href="#">Taylor Code</a>
 
             </figure>
             <nav>
                 <ul>
-                    <li>Work</li>
-                    <li>About</li>
-                    <li>Hire Us</li>
+                    <li><a ng-click="scrollTo('intro')">Home</a>
+                    </li>
+                    <li><a ng-click="scrollTo('projects')">Projects</a>
+                    </li>
+                    <li><a ng-click="scrollTo('blog')">Blog</a>
+                    </li>
                 </ul>
             </nav>
         </header>
@@ -40,6 +49,7 @@
             }).call(this);
         </script>
         <script type="text/javascript" src="scripts/main.js"></script>
+        <script type="text/javascript" src="scripts/plugins/angular-anchor-scroll.js"></script>
         <!--[if lt IE 9]>
             <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->

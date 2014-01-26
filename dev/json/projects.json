@@ -1,7 +1,7 @@
 [
     {
         "title": "Working as an Interactive Developer for Rosetta",
-        "content": "My current occupation is as a UI development intern for Rosetta. Since summer of 2013, I have contributed signficantly to one large project, and lead the development of a project. Unfortunately, due to a NDA, I cannot disclose of the clients or details of my work.",
+        "content": "My current occupation is as a UI development intern for Rosetta. Since summer of 2013, I have contributed signficantly to a multi-million dollar application with thousands of users, and lead the development of one innovative project. Unfortunately, due to a NDA, I cannot disclose of the clients or details of my work.",
         "imageDir": "rosetta",
         "images": [
             {
@@ -25,7 +25,7 @@
     {
         "title": "The Jobagrob Project",
         "imageDir": "jobagrob",
-        "content": "Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content.",
+        "content": "Jobagrob aims to revolutionize recruitment and job searching by matching applicants to employers. I am the sole developer, and one of the designers on a team of four forward-looking entrepreneurs and designers. Our expected launch date for the project is summer of 2014.",
         "images": [
             {
                 "src": "jobagrob-display.png"
@@ -79,7 +79,7 @@
     },
     {
         "title": "Whippex iPhone Trade-In Service",
-        "content": "Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content.",
+        "content": "In the wake of the iPhone revolution, I founded a reverse-ecommerce business to buy and resell used iPhones. I designed and programmed Whippex to provide the most convenient service for exchanging iPhones for cash.",
         "imageDir": "whippex",
         "images": [
             {
@@ -148,7 +148,7 @@
     },
     {
         "title": "Eventuall Collaborative Photosharing",
-        "content": "Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content.",
+        "content": "In Spring 2013, Evernote hosted a Hackathon on Cal Poly's campus. I took the opportunity to create an application I conceived of months prior. In 24 Hours I programmed the entire front-end and back-end of Eventuall with the assistance of three designers. After I presented our application to a panel of judges, we walked away with the top prize.",
         "imageDir": "eventuall",
         "images": [
             {
@@ -178,7 +178,7 @@
     },
     {
         "title": "University Graphic Systems App",
-        "content": "Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content.",
+        "content": "As the Web Development Manager for UGS, I created the UGS application to automate and digitize many of the tasks performed within the company. I designed and developed the entire application using my own JavaScript framework. It includes an environment that will allow future UGS developers to add mini-applications to run within the application.",
         "imageDir": "ugs",
         "images": [
             {
@@ -262,7 +262,7 @@
     },
     {
         "title": "Dillon Chi Client Management Portfolio",
-        "content": "Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content.",
+        "content": "The Dillon Chi project is a portfolio website, content management system, and client management system. I created the project for Dillon's personal use, but I plan to turn the application into a service.",
         "imageDir": "dillon",
         "images": [
             {
@@ -313,7 +313,7 @@
     },
     {
         "title": "Old Gateway Page and Portfolio",
-        "content": "Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content.",
+        "content": "My old portfolio site is not completely antiquated, and is worth mentioning in my current portfolio. It includes some unique interface features and it performed well at displaying my work.",
         "imageDir": "portfolio",
         "images": [
             {
@@ -338,7 +338,7 @@
     },
     {
         "title": "Electric Raves Concerts",
-        "content": "Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content. Here is some really good content.",
+        "content": "I created Electric Raves to show the world some fun times I've had at concerts. All of the content on the site is created from a raw JSON file (similar to this site), so it may be expanded upon and offered as a service.",
         "imageDir": "electric",
         "images": [
             {

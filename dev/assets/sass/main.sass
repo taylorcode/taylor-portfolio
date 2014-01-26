@@ -15,6 +15,7 @@ $golden-ratio: 1.618033
 body, body *
 	margin: 0
 	padding: 0
+	font-size: 15px
 	//@include box-shadow(0px 0 0 1px rgba(181,223,255,1))
 
 pre
@@ -41,7 +42,6 @@ p
 	line-height: 160%
 	margin-bottom: 15px
 	font-family: Lustria
-	font-size: 15px
 	line-height: 25px
 
 a[href]
@@ -54,9 +54,8 @@ body
 
 	h1, h2, h3, h4, h5
 		overflow: visible
-	
+
 	font-family: 'Source Sans Pro', sans-serif
-	font-size: 16px
 	>
 		*
 			width: 960px
@@ -136,12 +135,13 @@ body
 
 #projects, #blog, #post
 	article
+		a
+			font-size: inherit
 		margin-bottom: 20px
 		section
 			a
 				cursor: pointer
 				font-weight: 600
-				font-size: 15px
 				color: #4194E0
 				padding: 0px 18px 5px 0px
 				text-decoration: blink
@@ -296,8 +296,8 @@ body
 				em
 					font-style: normal
 				p
-					font-size: 14px
 					color: $dark-gray
+					font-size: 13px
 #post
 	margin-top: 80px
 	h1
@@ -318,10 +318,19 @@ body
 	span.code
 		background: $lighter-gray
 		font-family: monospace
-	a.quote
-		text-decoration: none
-		&:hover
-			text-decoration: underline
+
+	.fixed-upper-right
+		top: 162px
+		width: 100%
+		text-align: center
+		position: fixed
+		div
+			width: 960px
+			a
+				float: right
+				border: 1px solid $light-gray
+				padding: 20px 30px
+				text-decoration: none
 
 .scroll
 	position: relative
@@ -344,6 +353,8 @@ body
 			font-size: 22px
 		h3
 			font-size: 32px
+	#post .fixed-upper-right div
+		width: 1020px
 
 
 @media all and (min-width: 1401px)
@@ -363,6 +374,8 @@ body
 			font-size: 24px
 		h3
 			font-size: 36px
+	#post .fixed-upper-right div
+		width: 1080px
 
 
 
@@ -372,7 +385,6 @@ body
 	body
 		*
 			overflow: hidden
-		font-size: 13px
 		>
 			*
 				width: auto
@@ -405,7 +417,15 @@ body
 		h3
 			font-size: 30px
 			line-height: 32px
-
+			
+		.fixed-upper-right
+			position: static
+			text-align: center
+			div 
+				width: auto
+				a
+					float: none
+					display: block
 	#intro
 		margin: 0 0 30px 0
 		h1

@@ -2,7 +2,7 @@
 <p>Accessor properties were recently added to JavaScript and are gaining popularity in use. In the primitive examples, they appear as a convenient way to keep objects as opaque as the developer desires, while publishing dynamic value properties.</p>
 
 <p>
-After thinking about the possible use-case scenarios for accessor properties, I noticed that they alter a number of preexising paradigms of the syntax and semantics of the language.
+After thinking about the possible use-case scenarios for accessor properties, I noticed that they alter a number of current paradigms of the syntax and semantics of the language.
 </p>
 
 <p>
@@ -77,7 +77,7 @@ button.click ->
 
 <h3>Setters for Simple and Complex Inheritance</h3>
 
-<p>Setter are potentially useful to create expressive and declarative inheritence patterns. To illustrate this, consider the non-standard accessor property <span class="code">__proto__</span>. This property, now deprecated and likely to be replaced by the setter and getter methods of <span class="code">Object.setPrototypeOf</span> and <span class="code">Object.getPrototypeOf</span>, allows direct access to the the prototype of an object&#39;s constructor.</p>
+<p>Setter are potentially useful to create expressive and declarative inheritance patterns. To illustrate this, consider the non-standard accessor property <span class="code">__proto__</span>. This property, now deprecated and likely to be replaced by the setter and getter methods of <span class="code">Object.setPrototypeOf</span> and <span class="code">Object.getPrototypeOf</span>, allows direct access to the the prototype of an object&#39;s constructor.</p>
 
 <p>Although it is not recommended, the prototype of an object can be changed by reassigning <span class="code">__proto__</span>. Internally, <a class="quote" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf">&ldquo;a very slow operation&rdquo;</a> occurs within the setter function to change the prototype.</p>
 <pre>
@@ -201,4 +201,4 @@ In both cases, architectural simplicity was traded for syntactic and semantic si
 
 <p>Unfortunately, coffeescript does not yet support the convenient accessor property syntax for prototypes.</p>
 
-<p>Now that <span class="code">not</span> behaves like a method, I chose to create a flag property <span class="code">state</span> to indicate that the result of sebsequent tests should be negated.<p>
+<p>Now that <span class="code">not</span> behaves like a method, I chose to create a flag property <span class="code">state</span> to indicate that the result of subsequent tests should be negated.<p>

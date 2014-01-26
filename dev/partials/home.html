@@ -34,7 +34,7 @@
 <div id="blog" ng-controller="Blog">
     <h2>My Blog</h2>
     <article ng-repeat="p in posts">
-        <h3><a ng-href="#/post/{{$index}}#disqus_thread">{{p.title}}</a></h3>
+        <h3><a ng-href="#/post/{{$index}}">{{p.title}}</a></h3>
         <p>{{p.description}}</p>
         <div tags="p.tags"></div>
     </article>

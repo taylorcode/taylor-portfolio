@@ -10,7 +10,7 @@
 	<li><em>Logical redundancy at the source.</em><p>Events require that the source of a task is modified to communicate that the task was complete. This leads to semantic redundancy.</p></li>
 </ul>
 	
-<p>Events are oftentimes used in modules to indicate that some public method was invoked within an application. Now, this is not always true, considering the case of asynchronous callbacks:</p>
+<p>Via the &ldquo;pub-sub&rdquo; pattern, events often indicate that some public method of a module was invoked within an application. Now, this is not always true, considering the case of asynchronous callbacks:</p>
 
 	<pre>
 		<code class="coffeescript">resource().done (data) ->

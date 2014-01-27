@@ -9,19 +9,21 @@ window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch', 'ngAnimate
 	.otherwise templateUrl: '/partials/home.html'
 	$locationProvider.html5Mode true
 
-.controller 'Header', ($scope, $location, $anchorScroll) ->
+.controller 'Header', ($scope, $location, scrollToAnchor) ->
+	console.log 'header controller loaded'
+
 	$scope.scrollTo = (id) ->
+			#fixme hack - angular bug - https://github.com/angular/angular.js/issues/1102
+		if $location.path() is '/'
+			return scrollToAnchor.go id
+
+		scrollToAnchor.push id
 		$location.path '/'
-		#fixme hack - angular bug - https://github.com/angular/angular.js/issues/1102
-		old = $location.hash()
-		$location.hash id
-		$anchorScroll()
-		$location.hash old #restore previous hash state to prevent route change logic from occurring
 
 .controller 'Tags', ($scope, tagBank) ->
 	log 'tags controller loaded.'
 
-.controller 'Projects', ($scope, $http) ->
+.controller 'Projects', ($scope, $http, scrollToAnchor) ->
 
 
 	@stuff = 'this is accessible stuff'
@@ -36,6 +38,9 @@ window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch', 'ngAnimate
 	$http.get('json/projects.json')
 	.success (projects) ->
 		$scope.projects = projects
+
+	$scope.$watch 'projects', (val) ->
+		scrollToAnchor.go() if val
 
 	$scope.selectProject = (project) ->
 		$scope.selectedProject = project
@@ -171,19 +176,23 @@ window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch', 'ngAnimate
 		newTag
 	savedTags: []
 
-#.factory 'tagBank', ->
-#	tags = []
-#	set: (t) ->
-#		tags = t
-#	get: () ->
-#		tags
-#	correlate: (t) ->
-#		correlatedTags = []
-#		_.each t, (tag) ->
-#			_.each tags, (savedTag) ->
-#				correlatedTags.push savedTag if savedTag.tag is tag
-#		correlatedTags
-
-
+.factory 'scrollToAnchor', ($location, $anchorScroll, $timeout) ->
+	go: (id) ->
+		#fixme hack - angular bug - https://github.com/angular/angular.js/issues/1102
+		id = @pop() if not id
+		return if not id
+		old = $location.hash()
+		$timeout ->
+			$location.hash id
+			$anchorScroll()
+			$location.hash old #restore previous hash state to prevent route change logic from occurring
+		, 0
+	
+	push: (id) ->
+		@saved = id
+	pop: ->
+		val = @saved
+		delete @saved
+		return val
 
 

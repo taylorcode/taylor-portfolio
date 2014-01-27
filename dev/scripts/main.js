@@ -10,21 +10,26 @@
       templateUrl: '/partials/home.html'
     });
     return $locationProvider.html5Mode(true);
-  }).controller('Header', function($scope, $location, $anchorScroll) {
+  }).controller('Header', function($scope, $location, scrollToAnchor) {
+    console.log('header controller loaded');
     return $scope.scrollTo = function(id) {
-      var old;
-      $location.path('/');
-      old = $location.hash();
-      $location.hash(id);
-      $anchorScroll();
-      return $location.hash(old);
+      if ($location.path() === '/') {
+        return scrollToAnchor.go(id);
+      }
+      scrollToAnchor.push(id);
+      return $location.path('/');
     };
   }).controller('Tags', function($scope, tagBank) {
     return log('tags controller loaded.');
-  }).controller('Projects', function($scope, $http) {
+  }).controller('Projects', function($scope, $http, scrollToAnchor) {
     this.stuff = 'this is accessible stuff';
     $http.get('json/projects.json').success(function(projects) {
       return $scope.projects = projects;
+    });
+    $scope.$watch('projects', function(val) {
+      if (val) {
+        return scrollToAnchor.go();
+      }
     });
     $scope.selectProject = function(project) {
       return $scope.selectedProject = project;
@@ -203,6 +208,33 @@
         return newTag;
       },
       savedTags: []
+    };
+  }).factory('scrollToAnchor', function($location, $anchorScroll, $timeout) {
+    return {
+      go: function(id) {
+        var old;
+        if (!id) {
+          id = this.pop();
+        }
+        if (!id) {
+          return;
+        }
+        old = $location.hash();
+        return $timeout(function() {
+          $location.hash(id);
+          $anchorScroll();
+          return $location.hash(old);
+        }, 0);
+      },
+      push: function(id) {
+        return this.saved = id;
+      },
+      pop: function() {
+        var val;
+        val = this.saved;
+        delete this.saved;
+        return val;
+      }
     };
   });
 

@@ -1,5 +1,4 @@
-
-window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch']) #maybe include ngRetina
+window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch', 'ngAnimate']) #maybe include ngRetina
 
 .run (monitorScroll) ->
 	log 'application started.'
@@ -8,11 +7,16 @@ window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch']) #maybe in
 	$routeProvider
 	.when('/post/:postId', templateUrl: 'partials/post.html', controller: 'Post')
 	.otherwise templateUrl: '/partials/home.html'
-	#$locationProvider.html5Mode true
+	$locationProvider.html5Mode true
 
-.controller 'Header', ($scope, $location) ->
-  $scope.scrollTo = (id) ->
-  	$location.hash id
+.controller 'Header', ($scope, $location, $anchorScroll) ->
+	$scope.scrollTo = (id) ->
+		$location.path '/'
+		#fixme hack - angular bug - https://github.com/angular/angular.js/issues/1102
+		old = $location.hash()
+		$location.hash id
+		$anchorScroll()
+		$location.hash old #restore previous hash state to prevent route change logic from occurring
 
 .controller 'Tags', ($scope, tagBank) ->
 	log 'tags controller loaded.'

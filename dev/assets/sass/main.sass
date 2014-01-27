@@ -85,15 +85,17 @@ body
 				margin-top: 6px
 				float: right
 				li
-					font-weight: 300
-					cursor: pointer
 					display: inline-block
-					padding: 10px 0
-					margin: 0 15px
-					&:hover
-						border-bottom: 2px solid $lighter-gray
-						padding-bottom: 8px
-
+					a
+						display: block
+						font-weight: 300
+						cursor: pointer
+						text-decoration: none
+						margin: 10px 25px 0px 25px
+						padding-bottom: 10px
+						&:hover, &:active
+							border-bottom: 2px solid $lighter-gray
+							padding-bottom: 8px
 			figure
 				background-size: 200px
 				float: left
@@ -149,7 +151,7 @@ body
 	article
 		a[href]
 			text-decoration: none
-			&:hover
+			&:hover, &:active
 				text-decoration: underline
 
 #projects, #blog, #post
@@ -168,7 +170,7 @@ body
 				background: url(http://tylerbuilds.co/img/icon_new_window.png) no-repeat right 5px
 				margin-right: 16px
 				border-bottom: 1px dashed #ccc
-				&:hover
+				&:hover, &:active
 					border-bottom-color: #4194E0
 		[tags]
 			text-transform: uppercase
@@ -298,7 +300,7 @@ body
 					img
 						width: 100%
 						-webkit-user-drag: none
-						&:hover
+						&:hover, &:active
 							opacity: .95
 	img
 		cursor: pointer
@@ -347,69 +349,39 @@ body
 			width: 960px
 			a
 				float: right
-				border: 1px solid $light-gray
-				padding: 20px 30px
+				border: 1px solid $lighter-gray
+				opacity: .6
+				&:hover, &:active
+					opacity: 1
+				padding: 15px 20px 13px 12px
 				text-decoration: none
-
+				span
+					display: inline-block
+				.home
+					background: url(../images/icons/home.svg) center center no-repeat
+					width: 20px
+					height: 20px
+					margin-right: 7px
 .scroll
 	position: relative
 
 
 
-@media all and (min-width: 1201px) and (max-width: 1400px)
-	body > *
-		width: 1020px
-	h1
-		font-size: 62px
-	h2
-		font-size: 31px
-	h3
-		font-size: 23px
-	#post
-		h1
-			font-size: 52px
-		h2
-			font-size: 22px
-		h3
-			font-size: 32px
-	#post .fixed-upper-right div
-		width: 1020px
 
-
-@media all and (min-width: 1401px)
-	body > *
-		width: 1080px
-
-	h1
-		font-size: 64px
-	h2
-		font-size: 32px
-	h3
-		font-size: 24px
-	#post
-		h1
-			font-size: 54px
-		h2
-			font-size: 24px
-		h3
-			font-size: 36px
-	#post .fixed-upper-right div
-		width: 1080px
-
-
-
+@media all and (max-width: 460px)
+	body
+		>
+		header
+			text-align: center
+			figure
+				float: none
+				display: inline-block
+			nav
+				clear: left
+				ul
+					float: none
 
 @media all and (max-width: 500px)
-
-	body
-		*
-			overflow: hidden
-		>
-			*
-				width: auto
-				padding: 20px
-			.colors
-				padding: 0px
 
 	h1
 		font-size: 42px
@@ -425,9 +397,6 @@ body
 	h3
 		font-size: 21px
 
-	#blog, #post
-		article
-			width: auto
 
 	#post
 		h1
@@ -438,15 +407,6 @@ body
 		h3
 			font-size: 30px
 			line-height: 32px
-
-		.fixed-upper-right
-			position: static
-			text-align: center
-			div 
-				width: auto
-				a
-					float: none
-					display: block
 	#intro
 		margin: 0 0 30px 0
 		h1
@@ -495,20 +455,81 @@ body
 
 				ul
 					width: auto
-
-
-@media all and (max-width: 460px)
-	body
-		>
-		header
-			text-align: center
-			figure
-				float: none
-				display: inline-block
-			nav
-				clear: left
-				ul
-					float: none
-
 	
+
+@media all and (max-width: 960px)
+	body
+		*
+			overflow: hidden
+		>
+			*
+				width: auto
+				padding: 20px
+				padding-top: 0px
+			.colors
+				padding: 0px
+
+@media all and (max-width: 750px)
+	#blog, #post
+		article
+			width: auto
+	#post
+		.fixed-upper-right
+			position: static
+			text-align: center
+			div 
+				width: auto
+				a
+					float: none
+					display: block
+
+@media all and (min-width: 501px) and (max-width: 750px)
+	#projects
+		section, p
+			display: inline
+		[image-slider]
+			margin-bottom: 20px
+
+
+
+@media all and (min-width: 1201px) and (max-width: 1400px)
+	body > *
+		width: 1020px
+	h1
+		font-size: 62px
+	h2
+		font-size: 31px
+	h3
+		font-size: 23px
+	#post
+		h1
+			font-size: 52px
+		h2
+			font-size: 22px
+		h3
+			font-size: 32px
+	#post .fixed-upper-right div
+		width: 1020px
+
+
+@media all and (min-width: 1401px)
+	body > *
+		width: 1080px
+
+	h1
+		font-size: 64px
+	h2
+		font-size: 32px
+	h3
+		font-size: 24px
+	#post
+		h1
+			font-size: 54px
+		h2
+			font-size: 24px
+		h3
+			font-size: 36px
+	#post .fixed-upper-right div
+		width: 1080px
+
 

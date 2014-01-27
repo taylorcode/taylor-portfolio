@@ -153,7 +153,7 @@
         tags: '=',
         showTags: '@'
       },
-      templateUrl: 'partials/tags.html',
+      templateUrl: 'partials/directives/tags.html',
       controller: function($scope) {
         $scope.$watch('tags', function(tags) {
           if (tags) {
@@ -183,6 +183,33 @@
       restrict: 'E',
       compile: function(e) {
         return hljs.highlightBlock(e[0]);
+      }
+    };
+  }).directive('disqus', function($window) {
+    return {
+      restrict: 'A',
+      templateUrl: 'partials/directives/disqus.html',
+      link: function(scope, elem, attrs) {
+        var loadDisqus;
+        $window.disqus_shortname = 'taylorcode';
+        loadDisqus = function() {
+          return (function() {
+            this.dsq = document.createElement('script');
+            this.dsq.type = 'text/javascript';
+            this.dsq.async = true;
+            this.dsq.src = '//' + this.disqus_shortname + '.disqus.com/embed.js';
+            return (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(this.dsq);
+          })($window);
+        };
+        if (attrs.disqusTitle != null) {
+          return scope.$watch(attrs.disqusTitle, function(title) {
+            if (title) {
+              $window.disqus_title = title;
+              return loadDisqus();
+            }
+          });
+        }
+        return loadDisqus();
       }
     };
   }).factory('tagBank', function() {

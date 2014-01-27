@@ -4,6 +4,7 @@
 		<h2>{{post.description}}</h2>
 		<div tags="post.tags"></div>
 		<div ng-include="'partials/posts/'+postId+'.html'"></div>
+		<div disqus disqus-title="post.title"></div>
 	</article>
 	<div class="fixed-upper-right">
 		<div>

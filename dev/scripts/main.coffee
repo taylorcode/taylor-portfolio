@@ -140,7 +140,7 @@ window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch', 'ngAnimate
 	scope:
 		tags: '='
 		showTags: '@'
-	templateUrl: 'partials/tags.html'
+	templateUrl: 'partials/directives/tags.html'
 	controller: ($scope) ->
 		#convert to keyed object
 
@@ -161,6 +161,30 @@ window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch', 'ngAnimate
 	restrict: 'E'
 	compile: (e) ->
 		hljs.highlightBlock e[0]
+
+
+.directive 'disqus', ($window) ->
+	restrict: 'A'
+	templateUrl: 'partials/directives/disqus.html'
+	link: (scope, elem, attrs) ->
+
+		$window.disqus_shortname = 'taylorcode' # required: replace example with your forum shortname
+
+		loadDisqus = ->
+			(->
+			  @dsq = document.createElement 'script'
+			  @dsq.type = 'text/javascript'
+			  @dsq.async = true
+			  @dsq.src = '//' + @disqus_shortname + '.disqus.com/embed.js'
+			  (document.getElementsByTagName('head')[0] or document.getElementsByTagName('body')[0]).appendChild @dsq
+			)($window)
+
+		if attrs.disqusTitle?
+			return scope.$watch attrs.disqusTitle, (title) ->
+				if title
+					$window.disqus_title = title #attach to window for disqus's use
+					loadDisqus()
+		loadDisqus()
 
 
 .factory 'tagBank', ->

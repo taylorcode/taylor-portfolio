@@ -197,6 +197,8 @@ body
 		margin-bottom: 40px
 	[ng-include] ul
 		font-family: Lustria
+	.disqus_thread
+		margin-top: 20px
 
 #projects
 	[image-modal], [video-modal]
@@ -345,18 +347,19 @@ body
 		width: 100%
 		text-align: center
 		position: fixed
+		opacity: .7
+		&:hover, &:active
+			opacity: 1
 		div
 			width: 960px
 			a
 				float: right
 				border: 1px solid $lighter-gray
-				opacity: .6
-				&:hover, &:active
-					opacity: 1
-				padding: 15px 20px 13px 12px
+				padding: 11px 20px 13px 12px
 				text-decoration: none
 				span
 					display: inline-block
+					vertical-align: middle
 				.home
 					background: url(../images/icons/home.svg) center center no-repeat
 					width: 20px
@@ -474,7 +477,10 @@ body
 			width: auto
 	#post
 		.fixed-upper-right
-			position: static
+			background: white
+			bottom: 0
+			left: 0
+			top: auto
 			text-align: center
 			div 
 				width: auto

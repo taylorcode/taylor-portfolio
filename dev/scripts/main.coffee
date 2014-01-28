@@ -1,4 +1,4 @@
-window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch', 'ngAnimate']) #maybe include ngRetina
+window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch']) #maybe include ngRetina
 
 .run (monitorScroll) ->
 	log 'application started.'

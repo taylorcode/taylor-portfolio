@@ -56,10 +56,13 @@
 	"buffers":
 	[
 		{
+			"contents": "",
 			"file": "public/assets/sass/main.sass",
+			"file_size": -1,
+			"file_write_time": -1,
 			"settings":
 			{
-				"buffer_size": 6836,
+				"buffer_size": 0,
 				"line_ending": "Unix"
 			}
 		}
@@ -387,15 +390,15 @@
 					"file": "public/assets/sass/main.sass",
 					"settings":
 					{
-						"buffer_size": 6836,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6038,
-								6038
+								0,
+								0
 							]
 						],
 						"settings":

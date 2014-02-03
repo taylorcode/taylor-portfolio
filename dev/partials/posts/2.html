@@ -1,14 +1,14 @@
-<h3>Know When to Use Them</h3>
+<h3>First, a Little on Specifiers</h3>
 
 <p>
 It is a common pattern to require an <a href="http://books.google.com/books?id=PXa2bby0oQ0C&pg=PA50&lpg=PA50&dq=object+specifiers+javascript&source=bl&ots=HIuimau_lC&sig=Cd2FUWZqCtE14fWXbWsiUnLqC9g&hl=en&sa=X&ei=sPfrUtKeENKBogS4qoD4Cg&ved=0CDoQ6AEwAg#v=onepage&q=object%20specifiers%20javascript&f=false">object specifier</a> instead of parameters when creating a plugin or factory. Oftentimes the specifier is internally merged with a  &ldquo;defaults &rdquo; object and serves as settings for the plugins&#39; instance.</p>
 
 <p>
-Aside from providing syntactic clarity, object specifiers are useful in situations where there are optional arguments.
+Aside from providing syntactic clarity, object specifiers are useful in situations where there are optional parameters.
 </p>
 
 <pre>
-  <code class="coffeescript">doSomething (param1, param2, param2) ->
+  <code class="coffeescript">doSomething (param1, optionalParam2, param2) ->
 
 doSomething 'my' undefined 'argument'</code>
 </pre>
@@ -18,7 +18,7 @@ Alternatively, using a specifier:
 <pre>
   <code class="coffeescript">doSomething (spec) ->
 
-doSomething param1: 'my', param2: 'argument'</code>
+doSomething param1: 'my', param3: 'argument'</code>
 </pre>
 
 <p>They also eliminate the need to know the ordering of the parameters defined in the functions&#39; signature.</p>
@@ -55,12 +55,10 @@ In this example, the behaviour of <span class="code">catMaker</span> is modified
 </pre>
 
 <p>
-Although, this becomes rather tedious with several properties. 
+Although, this becomes rather tedious with several properties. Another thing that bothers me about this is that the specifier object is accessible to all methods we are attaching to the (plugins) instance. That feels messy. When the cat grows, you lose intellectual comprehension.
 </p>
-
-<h3>Function Parameter Delegation</h3>
-<p>
-Another issue is that the specifier object is accessible to all methods that are attached to the (plugins) instance. <strong>Ideally, every method would only have access to the properties it needs.</strong> The follow example addresses these two issues:
+<h3>A Functional Approach, Enter Currying</h3>
+<p>Ideally, every method of this instance would <strong>only have access to the properties from the specifier that it needs</strong>. One solution is to curry the functions, and define them in an outer scope:
 </p>
 
 <pre>
@@ -82,6 +80,4 @@ jinxie = catMaker purr: 'purrrr...', purrVolume: 99, weight: 3</code>
 </pre>
 
 <p>
-<span class="code">meowBuilder</span> does not have access to the specifier or the internal instance because it is defined outside of their scope. Furthermore, via the closure that is created, <span class="code">meowBuilder</span> has access to copies of the primitives passed to it, instead of references to properties of the specifier object.<p>
-
-This pattern is particularly useful in my opinion when creating large libraries or plugins where encapsulation and limiting scope are especially important.</p>
+<span class="code">meowBuilder</span> does not have access to the specifier or the internal instance because it is defined outside of their scope. Furthermore, via the closure that is created, <span class="code">meowBuilder</span> has access to copies of the (primitive) arguments passed to it, instead of references to properties of the specifier object. Yay.<p>

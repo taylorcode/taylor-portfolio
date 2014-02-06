@@ -1,116 +1,77 @@
-Oftentimes it is necessary to communicate across modules, or functional units, that some property was changed.
+AOP proxies as a replacement for internal callbacks
 
-Surely, if your application utilizes two-way data-binding by default, syncing up data and responses is rather easy. 
+Callbacks are messy.
 
-Therefore, this example is more for learning (or if you would like to build your own framework) rather than for direct practical application.
+What is a callback API? A convoluted peice of code.
 
+Every plugin should return a proxy object:
 
-Example: Perhaps the developer has established client-side long-polling within a controller to check if a user is still logged in. 
+var pluginInstance = $('#myElem').plugin();
 
-The response object contains information about the user's session, indicating whether it is expired or not.
+var pluginProxy = proxy(pluginInstance);
 
-This settings object is then conveyed to one or several views, so they can respond accordingly.
+pluginProxy.after('onSwipeLeft', function (arguments) {
 
-A primative example of a common solution, is to modify the controller's source to pass data directly to the view(s):
-
-<pre>
-  <code class="coffeescript">getUserSettings().done (settings) ->
-   
-    App.views.loggedInView.updateView settings
-
-    getUserSettings()</code>
-</pre>
+});
 
 
-This solution however is rather messy. It creates unnecessary connections between functional units, and it is difficult to maintain intellectual comprehension of the application as it grows in size.
-It is also difficult to test, for the invocations must be stubbed.
+They introduce static into gravure because its hard to get the ink out of the highlight cells.
+  Surface area of ink rises up with static
+  Problem = occurs in bindery
 
-Another approach is to use events:
+Fewer suppliers = less competition
 
-<pre>
-  <code class="coffeescript">getUserSettings().done (settings) ->
+Lithography doens't care - because its all flat
 
-    eventsAggregator.publish 'updateView', settings
+Acid
+  Make the cells bigger
+  Tape the area you don't want bigger
 
-    getUserSettings()</code>
-</pre>
+CONS
+Fewer paper suppliers for gravure
 
-Events are not preferred either because they still require modification of the source, among many other reasons detailed in my last post, "AOP proxies to replace events"
+Physical location of plants
+  Most back east, in population centers
+  Reno is the closest one to us
+  Hard to put one in gravure - california laws
 
-Enter JavaScript Accessor Properties
+Make ink less vicsious = decrease color
+  More viscous = more color slightly
+  Problem: Adjustment occurs globally
 
+Impression pressure - adjust color
 
-JavaScript accessor properties allow the developer to execute hidden functions when a property is accessed, or assigned a value. 
+Angle of doctor blade - adjust angle - adjust amount of ink
 
-I won't go too much into detail as there is quite a bit of literature already written about accessor properties, and if you are unfamiliar, read John Resigs post, "Accessor methods of things"
+How is it a flying splice - bigger surface area - hope that it sticks to the web
+  
+Shorter length of runs on Gravure are becoming more common
 
-Our end goal is to allow the views to automatically respond when the controller's settings object is changed, without modifying the source of either the controller or the views. These functional units should operate completelely independently, and  
+Gravure - Typically one wide web - divided up
 
-This is achieved with a technique similar to proxies for methods, but instead of proxying a method, we are proxying a simple value property.
-  <pre>
-    <code class="coffeescript">watchProperty = (obj, prop, adviceContext, adviceProp) ->
-      
-  value = obj[prop]
-
-  Object.defineProperty obj, prop,
-    get: ->
-      value
-    set: (newValue) ->
-      value = newValue
-      adviceContext[adviceProp].call adviceContext, 
-                                     newValue
-
-watchProperty App.controllers.userProfile, 'settings', 
-              App.views.loggedInView, 'updateView'</code>
-</pre>
+Why can you get greater shadows?
+  Gravure has a 3d image - better solid color
+  It dry traps
+    So you can put down more ink on top
 
 
-This is a rather rudimentary implementation, but it illustrates the concept fairly well.
+    Why reproduce better on crummy paper?
+      No water
 
-We are essentially adding "advice" to the setter of our <span class="code">userProfile.settings</span> property.
-The advice is to invoke the loggedInView's method, updateView, in the context of the view itself with the new settings object.
+  Multiple heads - more engraving time
+    Every single head must be able to reproduce the same size cells
+    Don't want color variation across the page
 
-Now, when the settings property is updated on the controller, the view will update automatically.
+Gravure
+  Everything is screened
 
-<pre>
-  <code class="coffeescript">getSettingsResource().done (response) ->
-    App.controllers.userProfile.settings = response</code>
-</pre>
+  Gravure - not as good as lithography on highlights
 
+  Low-key images
+    Lots of shadows
 
-
-Another case I considered is the use of the setter as a replacement for inheritence syntax. This is a rather specific example, although the same approach can be applied for any object methods... NOT GOOD 
-
-
-This doesn't improve the capability of the language, but it may improve readability and comprehension:
-
-var myObject = new AccessorObject
-
-myObject.inheritsFrom = parentObject;
-myObject.extends = otherObjectA;
-myObject.extends = otherObjectB;
-
-The last use case I find signiciant at the moment is to us accessor properties in a proxy fashion, to add additional behaviour or "advice" when properties are accessed or assigned.
-
- <pre>
-    <code class="coffeescript">
-
-watchProperty = (obj, prop, adviceContext, adviceProp) ->
-      
-  value = obj[prop]
-
-  Object.defineProperty obj, prop,
-    get: ->
-      value
-    set: (newValue) ->
-      value = newValue
-      adviceContext[adviceProp].call adviceContext, 
-                                     newValue
-
-watchProperty App.controllers.userProfile, 'settings', 
-              App.views.loggedInView, 'updateView'</code>
-</pre>
+  Why do is black important
+    You print text
+    Make cells smaller - tighter together = jagged edge less visible
 
 
-In this example, we can unobtrusively listen for the change in BLAH
-    

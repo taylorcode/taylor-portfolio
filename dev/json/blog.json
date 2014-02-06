@@ -12,6 +12,6 @@
     {
         "title": "A Useful Factory Construction Pattern Using Object Specifiers and Currying",
         "description": "Limit the parameters your methods have access to by currying. A useful pattern I picked up while perusing some of the Angular JS source code.",
-        "tags": ["Object Specifiers", "Functional Partitioning"]
+        "tags": ["Object Specifiers", "Currying"]
     }
 ]

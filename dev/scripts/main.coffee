@@ -8,6 +8,7 @@ window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch']) #maybe in
 	.when('/post/:postId', templateUrl: 'partials/post.html', controller: 'Post')
 	.otherwise templateUrl: '/partials/home.html'
 	$locationProvider.html5Mode true
+	$locationProvider.hashPrefix '!'
 
 .controller 'Header', ($scope, $location, scrollToAnchor) ->
 	console.log 'header controller loaded'
@@ -18,7 +19,7 @@ window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch']) #maybe in
 			return scrollToAnchor.go id
 
 		scrollToAnchor.push id
-		$location.path '/'
+		$location.path '#!/'
 
 .controller 'Tags', ($scope, tagBank) ->
 	log 'tags controller loaded.'

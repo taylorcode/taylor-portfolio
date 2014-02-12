@@ -1,7 +1,7 @@
 var express = require('express'),
     app = express(),
     logfmt = require('logfmt'),
-    crawlme = require('crawlme'),
+    //crawlme = require('crawlme'),
     port;/*,
     mongoose = require('mongoose'),
     Account = require('./server/schemas/account-model'),
@@ -17,7 +17,9 @@ mongoose.connect('mongodb://localhost/jobagrob', function (err) {
 
 */
 app.configure(function() {
-  app.use(crawlme());
+
+  //app.use(crawlme());
+
   app.use(express.static('dev'));
   //app.use(express.cookieParser());
   app.use(express.bodyParser());

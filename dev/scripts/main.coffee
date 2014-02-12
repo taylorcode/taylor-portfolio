@@ -7,9 +7,7 @@ window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch']) #maybe in
 	$routeProvider
 	.when('/post/:postId', templateUrl: 'partials/post.html', controller: 'Post')
 	.otherwise templateUrl: '/partials/home.html'
-	#$locationProvider.html5Mode true
-	
-	$locationProvider.hashPrefix('!');
+	$locationProvider.html5Mode true
 
 .controller 'Header', ($scope, $location, scrollToAnchor) ->
 	console.log 'header controller loaded'

@@ -9,7 +9,7 @@
     }).otherwise({
       templateUrl: '/partials/home.html'
     });
-    return $locationProvider.hashPrefix('!');
+    return $locationProvider.html5Mode(true);
   }).controller('Header', function($scope, $location, scrollToAnchor) {
     console.log('header controller loaded');
     return $scope.scrollTo = function(id) {

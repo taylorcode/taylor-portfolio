@@ -3,13 +3,12 @@
   window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch']).run(function(monitorScroll) {
     return log('application started.');
   }).config(function($routeProvider, $locationProvider) {
-    $routeProvider.when('/post/:postId', {
+    return $routeProvider.when('/post/:postId', {
       templateUrl: 'partials/post.html',
       controller: 'Post'
     }).otherwise({
       templateUrl: '/partials/home.html'
     });
-    return $locationProvider.hashPrefix('!');
   }).controller('Header', function($scope, $location, scrollToAnchor) {
     console.log('header controller loaded');
     return $scope.scrollTo = function(id) {
@@ -17,7 +16,7 @@
         return scrollToAnchor.go(id);
       }
       scrollToAnchor.push(id);
-      return $location.path('#!/');
+      return $location.path('/');
     };
   }).controller('Tags', function($scope, tagBank) {
     return log('tags controller loaded.');

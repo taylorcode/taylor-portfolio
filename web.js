@@ -98,6 +98,11 @@ passport.deserializeUser(function(id, done) {
 */
 
 
+
+app.use(function(req, res) {
+    res.sendfile('dev/index.html');
+});
+
 var port = Number(process.env.PORT || 5000);
 
 app.listen(port, function() {

@@ -3,12 +3,13 @@
   window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch']).run(function(monitorScroll) {
     return log('application started.');
   }).config(function($routeProvider, $locationProvider) {
-    return $routeProvider.when('/post/:postId', {
+    $routeProvider.when('/post/:postId', {
       templateUrl: 'partials/post.html',
       controller: 'Post'
     }).otherwise({
       templateUrl: '/partials/home.html'
     });
+    return $locationProvider.hashPrefix('!');
   }).controller('Header', function($scope, $location, scrollToAnchor) {
     console.log('header controller loaded');
     return $scope.scrollTo = function(id) {

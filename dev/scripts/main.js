@@ -9,7 +9,6 @@
     }).otherwise({
       templateUrl: '/partials/home.html'
     });
-    $locationProvider.html5Mode(true);
     return $locationProvider.hashPrefix('!');
   }).controller('Header', function($scope, $location, scrollToAnchor) {
     console.log('header controller loaded');
@@ -18,7 +17,7 @@
         return scrollToAnchor.go(id);
       }
       scrollToAnchor.push(id);
-      return $location.path('/');
+      return $location.path('#!/');
     };
   }).controller('Tags', function($scope, tagBank) {
     return log('tags controller loaded.');

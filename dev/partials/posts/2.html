@@ -1,84 +1,204 @@
-<h3>First, a Little on Specifiers</h3>
+<h3>They&#39;re More Useful Than You Thought</h3>
+<p>Accessor properties were recently added to JavaScript and are gaining popularity in use. In the primitive examples, they appear as a convenient way to keep objects as opaque as the developer desires, while publishing dynamic value properties.</p>
 
 <p>
-It is a common pattern to require an <a href="http://books.google.com/books?id=PXa2bby0oQ0C&pg=PA50&lpg=PA50&dq=object+specifiers+javascript&source=bl&ots=HIuimau_lC&sig=Cd2FUWZqCtE14fWXbWsiUnLqC9g&hl=en&sa=X&ei=sPfrUtKeENKBogS4qoD4Cg&ved=0CDoQ6AEwAg#v=onepage&q=object%20specifiers%20javascript&f=false">object specifier</a> instead of parameters when creating a plugin or factory. Oftentimes the specifier is internally merged with a  &ldquo;defaults &rdquo; object and serves as settings for the plugins&#39; instance.</p>
-
-<p>
-Aside from providing syntactic clarity, object specifiers are useful in situations where there are optional parameters.
+After thinking about the possible use-case scenarios for accessor properties, I noticed that they alter a number of current paradigms of the syntax and semantics of the language.
 </p>
 
-<pre>
-  <code class="coffeescript">doSomething (param1, optionalParam2, param2) ->
-
-doSomething 'my' undefined 'argument'</code>
-</pre>
-
-Alternatively, using a specifier:
-
-<pre>
-  <code class="coffeescript">doSomething (spec) ->
-
-doSomething param1: 'my', param3: 'argument'</code>
-</pre>
-
-<p>They also eliminate the need to know the ordering of the parameters defined in the functions&#39; signature.</p>
-
-<h3>Properties are Not Parameters</h3>
 <p>
-One drawback to using a specifier in place of parameters is that references to the properties are accessible outside of the scope of the invoked function. A copy of a reference to the specifier is passed into the function, resulting in a pass-by-reference effect for all of the primitive &ldquo;parameters&rdquo;:
-</p>
-
-<pre>
-  <code class="coffeescript">catMaker = (spec) ->
-  cat = {}
-  cat.meow = ->
-    alert spec.purr
+The assignment or access of a property may now lead to any number of outcomes, as these operations now invoke internal functions. Syntactically, setters are limited to a single parameter, while getters allow no parameters.</p>
     
-  cat
-
-catSpec = purr: "purrrrr"
-myCat = catMaker(catSpec)
-myCat.purr() # purrrrr
-catSpec.purr = "bark!"
-myCat.purr() # bark!</code>
+<pre>
+    <code class="coffeescript">dog.run = 'fast' #setter method receives 'fast' argument
+dog.run #getter method is invoked without arguments</code>
 </pre>
 
+    
 <p>
-In this example, the behaviour of <span class="code">catMaker</span> is modified from the outside. Now, this is not necessarily bad, however. It is functionally dissimilar from parameters. A workaround for this is to cache references to the specifiers&#39; properties within the closure:
-</p>
-
-<pre>
-  <code class="coffeescript">catMaker = (spec) ->
-  cat = {}
-  purr = spec.purr
-  # ...code...</code>
-</pre>
-
-<p>
-Although this becomes rather tedious with several properties. Also problematic, nothing can be said about what properties an inner function requires from the specifier without examining its body. Within <span class="code">cat.meow</span>, <span class="code">spec.purr</span> is used, but we had to examine the function to know this.
-
-</p>
-<h3>A Functional Approach, Enter Currying</h3>
-<p>Ideally, every method of this instance would <strong>only have access to the properties from the specifier that it needs</strong>, and these properties would be visible in the function signature. One solution is to curry the functions, and define them in an outer scope:
-</p>
-
-<pre>
-  <code class="coffeescript">catMaker = (->
+These special properties do have several use-case scenarios, that increase the readability, semantic clarity, and number of syntactic design options for developers.</p>
   
-  meowBuilder = (purr, volume) ->
-    (name) ->
-      log purr + ' I like to be pet by ' + name
-      log 'purr volume: ' + volume
-      
-  (spec) ->
-    cat = {}
-    cat.meow = meowBuilder spec.purr spec.purrVolume
-    cat
-    
+
+<h3>Chaining Methods with Getters</h3>  
+<p>DOM manipulations are a thing of the past (thank you two-way data binding). But consider the convenience of using accessor properties to &ldquo;chain methods&rdquo;:
+
+<pre>
+    <code class="coffeescript">myList.parent.siblings.first.html 'Hello there'</code>
+</pre>
+
+<p>
+The access of each of the properties invokes their getter function, which performs the normal operations of DOM tree traversals that the equivalent methods performed.
+</p>
+
+<p>The new semantic implications are the same as the implications of the syntax with function properties:
+</p>
+<pre>
+    <code class="coffeescript">myList.parent().siblings().first().remove()</code>
+</pre>
+<p>
+<strong>With one exception:</strong> no parameters can be passed to the getter. IMO, this limitation actually provides semantic clarity: Because no parameters are possible, it&#39;s capabilities are simplified.
+</p>
+
+
+<p>A localized implementation displays this possibility:</p>
+
+</p>
+<pre>
+    <code class="html">&lt;div&gt;
+  &lt;a id=&quot;nested-child&quot;&gt;I&#39;m nested!&lt;/a&gt;
+&lt;/div&gt;</code>
+</pre>
+
+
+<pre>
+    <code class="coffeescript">Object.defineProperty $.fn, 'parentLink',
+  get: ->
+    @parent()
+
+$('#nested-child').parentLink.css 'background', 'blue'</code>
+</pre>
+
+<p>Properties can now be used to create complex connections between objects that make semantic sense.<p>
+
+<h4>New Consequence of Not Caching</h4>
+<p>One consequence that comes to mind with getter functions is that accessing a property is not equivalent to accessing a &ldquo;reference&rdquo; to the properties value:</p>
+<pre>
+    <code class="coffeescript">button.click ->
+  nestedChild.siblings.css 'background', 'blue'</code>
+</pre>
+
+<p>Will cause a DOM traversal to find the sibling nodes, while:</p>
+<pre>
+    <code class="coffeescript">siblings = nestedChild.siblings
+button.click ->
+  siblings.css 'background', 'blue'</code>
+</pre>
+<p>Will not. Formerly, these two statements were functionally equivalent.</p>
+
+
+<h3>Setters for Simple and Complex Inheritance</h3>
+
+<p>Setter are potentially useful to create expressive and declarative inheritance patterns. To illustrate this, consider the non-standard accessor property <span class="code">__proto__</span>. This property, now deprecated and likely to be replaced by the setter and getter methods of <span class="code">Object.setPrototypeOf</span> and <span class="code">Object.getPrototypeOf</span>, allows direct access to the the prototype of an object&#39;s constructor.</p>
+
+<p>Although it is not recommended, the prototype of an object can be changed by reassigning <span class="code">__proto__</span>. Internally, <a class="quote" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf">&ldquo;a very slow operation&rdquo;</a> occurs within the setter function to change the prototype.</p>
+<pre>
+    <code class="coffeescript">objectInstance.__proto__ = Object.create differentObject</code>
+</pre>
+
+<p>Extending upon this idea, setters can be used to create any number of dynamic &ldquo;assignments&rdquo;. Consider an inheritance pattern:</p>
+<pre>
+    <code class="coffeescript">a.inheritsFrom = b
+a.mixedWith = c
+a.mixedWith = d</code>
+</pre>
+
+<p>A simple example implementation:</p>
+<pre>
+    <code class="coffeescript">Object.defineProperty Object::, 'mixedWith',
+  set: (obj) ->
+    _.extend this, obj
+
+human = name: 'Taylor'
+
+musician = play: ->
+  alert 'A Symphony'
+
+human.mixedWith = musician</code>
+</pre>
+
+
+<p>Sequential assignments could operate similar to nested function invocations:</p>
+<pre>
+    <code class="coffeescript">a.inheritsFrom = b.clone.mixedWith = c</code>
+</pre>
+
+
+
+<h3>Accessor Properties for Testing Libraries</h3>
+
+<p>Libraries such as <a href="http://pivotal.github.io/jasmine/">Jasmine</a> aim to create the most readable and concise syntax for testing JavaScript. Accessor properties can help to reduce the architectural complexity of creating these libraries and to eliminate syntactic artifacts.</p>
+
+<p>Consider this rudimentary implementation of the toEqual method:</p>
+<pre>
+    <code class="coffeescript">testProtoInstance =
+  toEqual: (val) ->
+    return true  if @val is val #an object equality check
+    false
+
+  not:
+    toEqual: ->
+      not @toEqual.apply this, arguments
+
+expect = (val) ->
+  tester = Object.create testProtoInstance
+  tester.not.toEqual = tester.not.toEqual.bind tester
+  tester.val = val
+  tester</code>
+</pre>
+
+<pre>
+    <code class="coffeescript">console.log expect(5).toEqual 5 # true
+console.log expect(5).not.toEqual 5 # false</code>
+</pre>
+
+<p>The goal here is of course to allow the <span class="code">toEqual</span> method of the nested <span class="code">not</span> object to simply call the outer object&#39;s <span class="code">toEqual</span> method and negate the result. Unfortunately, this was not straightforward to achieve:</p>
+
+<p>The context of <span class="code">not.toEqual</span> upon invocation is the <span class="code">not</span> object. Therefore, in order to gain access to the instance from within <span class="code">not.toEqual</span>, we are forced to manually bind a new context through reassignment:</p>
+
+<pre>
+    <code class="coffeescript">tester.not.toEqual = tester.not.toEqual.bind tester</code>
+</pre>
+
+<p>Another solution is to create a closure that traps a reference to the instance as a private variable.</p>
+
+<pre>
+  <code class="coffeescript">testProtoInstance = (->
+  instance = undefined
+  toEqual: (val) ->
+    return true  if @val is val
+    false
+
+  not:
+    toEqual: ->
+      not instance.toEqual.apply instance, arguments
+
+  init: ->
+    instance = this
 )()
 
-jinxie = catMaker purr: 'purrrr...', purrVolume: 99, weight: 3</code>
+expect = (val) ->
+  tester = Object.create testProtoInstance
+  tester.init() #trap a reference to the instance
+  tester.val = val
+  tester</code>
 </pre>
 
 <p>
-<span class="code">meowBuilder</span> does not have access to the specifier or the internal instance because it is defined outside of their scope. Furthermore, via the closure that is created, <span class="code">meowBuilder</span> has access to copies of the (primitive) arguments passed to it, instead of references to properties of the specifier object.<p>
+In both cases, architectural simplicity was traded for syntactic and semantic simpicity.</p>
+
+<h3>Don&#39;t Make the Trade</h3>
+
+<p>Fortunately we can define a getter for the <span class="code">not</span> property to retain the semantic clarity of a value property and the architectural simplicity of a method.</p>
+
+<pre>
+  <code class="javascript">var testProtoInstance = {
+    state: true,
+    toEqual: function (val) {
+        if (this.val === val) {
+            return this.state;
+        }
+        return !this.state;
+    },
+    get not() {
+        this.state = !this.state;
+        return this;
+    }
+}, expect = function (val) {
+    var tester = Object.create(testProtoInstance);
+    tester.val = val;
+    return tester;
+};</code>
+</pre>
+
+<p>Unfortunately, coffeescript does not yet support the convenient accessor property syntax for prototypes.</p>
+
+<p>Now that <span class="code">not</span> behaves like a method, I chose to create a flag property <span class="code">state</span> to indicate that the result of subsequent tests should be negated.<p>

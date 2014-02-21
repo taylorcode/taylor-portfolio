@@ -50,7 +50,11 @@
   }).controller('Post', function($scope, $routeParams, $http) {
     $scope.postId = $routeParams.postId;
     return $http.get('json/blog.json').success(function(posts) {
-      return $scope.post = posts[$routeParams.postId];
+      return angular.forEach(posts, function(post) {
+        if (parseInt($routeParams.postId) === post.id) {
+          return $scope.post = post;
+        }
+      });
     });
   }).factory('monitorScroll', function() {
     var $w;
@@ -265,7 +269,9 @@
     };
   }).filter('reverse', function() {
     return function(items) {
-      return items.slice().reverse();
+      if (items) {
+        return items.slice().reverse();
+      }
     };
   });
 

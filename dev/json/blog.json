@@ -1,20 +1,24 @@
 [
     {
+        "id": 1,
         "title": "AOP Proxies as a Replacement for Events",
         "description": "Communication between two application modules is typically handled with events. Proxies provide a means to replace events, while offering other benefits.",
        	"tags": ["JavaScript AOP", "JavaScript Proxies", "JavaScript Events"]
     },
     {
+        "id": 2,
         "title": "The Semantic and Syntactic Implications of JavaScript Accessor Properties",
         "description": "Accessor properties could change the way you write and comprehend JavaScript.",
        	"tags": ["JavaScript Accessor Properties"]
     },
     {
+        "id": 3,
         "title": "A Useful Factory Construction Pattern Using Object Specifiers and Currying",
         "description": "Limit the parameters your methods have access to by currying. A useful pattern I picked up while perusing some of the Angular JS source code.",
         "tags": ["Object Specifiers", "Currying"]
     },
     {
+        "id": 4,
         "title": "Creating an Angular Image Resize Directive with Photoshop Quality Using Canvas",
         "description": "Reduce the burden of slow networks on the performance of your application, take the responsibility of image downsizing off of your server.",
         "tags": ["Canvas", "Angular Directives", "Image Resize Algorithm"]

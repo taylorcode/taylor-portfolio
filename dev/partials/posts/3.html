@@ -1,44 +1,84 @@
-<h3>Why Resize on the Client?</h3>
- <p>
- Some time ago I discovered that you could use <span class="code">canvas</span> to resize images client-side with JavaScript. Now, you may be thinking &ldquo;cool, but why would anyone want to do that?&rdquo;. It turns out, there are a number of good reasons. I'll list them in order of significance:
- </p>
-
-<ul>
-	<li><em>Network speeds are too slow</em><p>As network speeds increase, so does the resolution of the images we try to upload.
-</li>
-	<li><em>Servers are busy</em><p>Resizing images requires significant processing power. That same power could be allocated to database exchanges and template rendering&mdash;running your app.</p></li>
-	<li><em>Clients are fast</em><p>Smartphones have quad-core processors now. Your tablet is even faster. Take advantage of that!</p></li>
-</ul>
-
-<h3>Early Attempts</h3>
-
-<p>Back in the day (2012) after reading through the documentation for the fancy (new) File API and Canvas API, I finally produced a decent client-side image compressor and asynchronous file uploader.</p>
-
-<p>Unfortunately, due to a few completely absurd &ldquo;bugs&rdquo; in IOS6 that squashed and flipped images over 1MB, I asked the stackoverflow community for some help: <a href="http://stackoverflow.com/questions/12539862/ios6-and-safari-photo-uploading-file-api-canvas-jquery-ajax-uploading-and">IOS6 and Safari Photo Uploading - File API + Canvas + jQuery Ajax Uploading and Resizing Files Asynchronously</a>.</p>
-
-<p>Luckily someone named <a href="https://github.com/gokercebeci">Goker Cebeci</a> from Istanbul already created a jQuery plugin, tackling the squashing issue with a <a href="https://github.com/stomita/ios-imagefile-megapixel">mega pixel image rendering library for iOS6 Safari</a> and the orientation issue with <a href="https://github.com/jseidelin/exif-js">Exif.js</a>.</p>
-
-<h3>The Quality Issue</h3>
-<p>I was pleasantly surprised with the result, but discouraged at the poor image quality that resulted from using canvas's context method <span class="code">drawImage</span> for mapping an image onto a canvas:
-
-<pre>
-	<code class="coffeescript">ctx = canvas.getContext '2d'
-ctx.drawImage origImage 0 0 width height</code>
-</pre>
-
-<h3>Interpolation Algorithms FTW</h3>
-
-<p>After looking around the web and reading through some old notes on image compression from a class I took a few years ago, I discovered the reason the main reason for poor image-quality after resizing: interpolation. When you resize an image, you are mapping the pixels from the current resolution &ldquo;grid&rdquo;, onto another grid.</p>
-<p>Most of the issues that arise during an image downsize occur because of mathematical rounding errors in this mapping process. If the grids are not evenly divisible, the algorithm must approximate the interpolated pixel values.</p>
-<p>One obvious solution to this problem is to simply normalize the resize scaling factor so that the grids are always evenly divisible. Yet, this is clearly limiting. There are a number of algorithms that attempt to solve this problem: <a href="http://www.cambridgeincolour.com/tutorials/image-interpolation.htm">nearest-neighbor, billinear interpolation, bicubic interpolation, spline &amp; sync.</a></p>
-
-<h3>Use My Directive!</h3>
-<p>
-I had two goals when creating my most recent client-side image resizer: First, I wanted it to be an angular directive. Second, it needed to have fast, high quality image resizing comparable to Photoshop.</p>
-
-<p>Thanks to <a href="https://github.com/Mischi">Fabian Raetz</a> for creating the foundation for an <a href="https://github.com/Mischi/angularjs-imageupload-directive">angular image-resize directive</a>, and <a href="https://github.com/gamealchemist/">gamealchemist</a> for providing an excellent image resize algorithm in response to a <a href="http://stackoverflow.com/questions/18922880/html5-canvas-resize-downscale-image-high-quality">stackoverflow question</a>, I merged, refined, and birthed, the canvas-image-resize directive:</p>
+<h3>First, a Little on Specifiers</h3>
 
 <p>
-	<a href="https://github.com/taylorcode/angular-high-quality-image-resize-directive">Angular High Quality Image Resize Directive</a>
+It is a common pattern to require an <a href="http://books.google.com/books?id=PXa2bby0oQ0C&pg=PA50&lpg=PA50&dq=object+specifiers+javascript&source=bl&ots=HIuimau_lC&sig=Cd2FUWZqCtE14fWXbWsiUnLqC9g&hl=en&sa=X&ei=sPfrUtKeENKBogS4qoD4Cg&ved=0CDoQ6AEwAg#v=onepage&q=object%20specifiers%20javascript&f=false">object specifier</a> instead of parameters when creating a plugin or factory. Oftentimes the specifier is internally merged with a  &ldquo;defaults &rdquo; object and serves as settings for the plugins&#39; instance.</p>
+
+<p>
+Aside from providing syntactic clarity, object specifiers are useful in situations where there are optional parameters.
 </p>
 
+<pre>
+  <code class="coffeescript">doSomething (param1, optionalParam2, param2) ->
+
+doSomething 'my' undefined 'argument'</code>
+</pre>
+
+Alternatively, using a specifier:
+
+<pre>
+  <code class="coffeescript">doSomething (spec) ->
+
+doSomething param1: 'my', param3: 'argument'</code>
+</pre>
+
+<p>They also eliminate the need to know the ordering of the parameters defined in the functions&#39; signature.</p>
+
+<h3>Properties are Not Parameters</h3>
+<p>
+One drawback to using a specifier in place of parameters is that references to the properties are accessible outside of the scope of the invoked function. A copy of a reference to the specifier is passed into the function, resulting in a pass-by-reference effect for all of the primitive &ldquo;parameters&rdquo;:
+</p>
+
+<pre>
+  <code class="coffeescript">catMaker = (spec) ->
+  cat = {}
+  cat.meow = ->
+    alert spec.purr
+    
+  cat
+
+catSpec = purr: "purrrrr"
+myCat = catMaker(catSpec)
+myCat.purr() # purrrrr
+catSpec.purr = "bark!"
+myCat.purr() # bark!</code>
+</pre>
+
+<p>
+In this example, the behaviour of <span class="code">catMaker</span> is modified from the outside. Now, this is not necessarily bad, however. It is functionally dissimilar from parameters. A workaround for this is to cache references to the specifiers&#39; properties within the closure:
+</p>
+
+<pre>
+  <code class="coffeescript">catMaker = (spec) ->
+  cat = {}
+  purr = spec.purr
+  # ...code...</code>
+</pre>
+
+<p>
+Although this becomes rather tedious with several properties. Also problematic, nothing can be said about what properties an inner function requires from the specifier without examining its body. Within <span class="code">cat.meow</span>, <span class="code">spec.purr</span> is used, but we had to examine the function to know this.
+
+</p>
+<h3>A Functional Approach, Enter Currying</h3>
+<p>Ideally, every method of this instance would <strong>only have access to the properties from the specifier that it needs</strong>, and these properties would be visible in the function signature. One solution is to curry the functions, and define them in an outer scope:
+</p>
+
+<pre>
+  <code class="coffeescript">catMaker = (->
+  
+  meowBuilder = (purr, volume) ->
+    (name) ->
+      log purr + ' I like to be pet by ' + name
+      log 'purr volume: ' + volume
+      
+  (spec) ->
+    cat = {}
+    cat.meow = meowBuilder spec.purr spec.purrVolume
+    cat
+    
+)()
+
+jinxie = catMaker purr: 'purrrr...', purrVolume: 99, weight: 3</code>
+</pre>
+
+<p>
+<span class="code">meowBuilder</span> does not have access to the specifier or the internal instance because it is defined outside of their scope. Furthermore, via the closure that is created, <span class="code">meowBuilder</span> has access to copies of the (primitive) arguments passed to it, instead of references to properties of the specifier object.<p>

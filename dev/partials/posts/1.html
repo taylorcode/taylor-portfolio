@@ -1,204 +1,89 @@
-<h3>They&#39;re More Useful Than You Thought</h3>
-<p>Accessor properties were recently added to JavaScript and are gaining popularity in use. In the primitive examples, they appear as a convenient way to keep objects as opaque as the developer desires, while publishing dynamic value properties.</p>
-
-<p>
-After thinking about the possible use-case scenarios for accessor properties, I noticed that they alter a number of current paradigms of the syntax and semantics of the language.
+<h3>Events are an Adapted Solution</h3>
+<p>Events are oftentimes used within applications to allow cross-module communication without creating unnecessary dependencies. Unnecessary dependencies occur when modules rely on the functionality of other modules to perform their own set of tasks. Events are one implementation of the broader idea of functional decoupling, however they are not always the best option to achieve decoupling IMO.
 </p>
 
+<p>Here are a few issues with using events to functionally decouple an application&#39;s modules:</p>
+<ul>
+	<li><em>Debugging tools cannot trace publishers to subscribers.</em><p>The stack trace of an error will report back to the subscription, but not to the publisher.</li>
+	<li><em>Lint tools cannot check for incorrect namespacing.</em><p>Events are namespaced with strings, therefore invalid publishers or subscribers are invisible to lint tool checks.</p>
+	<li><em>Forsight of the entire application is required when creating modules.</em><p>Although modules are functionally decoupled, the developers of each module must still be aware of what events they must publish and subscribe to.</p></li>
+	<li><em>Logical redundancy at the source.</em><p>Events require that the source of a task is modified to communicate that the task was complete. This leads to semantic redundancy.</p></li>
+</ul>
+	
+<p>Via the &ldquo;pub-sub&rdquo; pattern, events often indicate that some public method of a module was invoked within an application. Now, this is not always true, considering the case of asynchronous callbacks:</p>
+
+	<pre>
+		<code class="coffeescript">resource().done (data) ->
+
+	updateModel data
+
+	eventsAggregator.trigger 'modelUpdated'
+</code>
+	</pre>
+
 <p>
-The assignment or access of a property may now lead to any number of outcomes, as these operations now invoke internal functions. Syntactically, setters are limited to a single parameter, while getters allow no parameters.</p>
-    
-<pre>
-    <code class="coffeescript">dog.run = 'fast' #setter method receives 'fast' argument
-dog.run #getter method is invoked without arguments</code>
-</pre>
-
-    
-<p>
-These special properties do have several use-case scenarios, that increase the readability, semantic clarity, and number of syntactic design options for developers.</p>
-  
-
-<h3>Chaining Methods with Getters</h3>  
-<p>DOM manipulations are a thing of the past (thank you two-way data binding). But consider the convenience of using accessor properties to &ldquo;chain methods&rdquo;:
-
-<pre>
-    <code class="coffeescript">myList.parent.siblings.first.html 'Hello there'</code>
-</pre>
-
-<p>
-The access of each of the properties invokes their getter function, which performs the normal operations of DOM tree traversals that the equivalent methods performed.
+	But in testable, well-written modules, the tasks of the module are published as properties on the module itself. In the case of asynchronous callbacks, the data obtained from a resource is passed to a public method.
 </p>
 
-<p>The new semantic implications are the same as the implications of the syntax with function properties:
-</p>
-<pre>
-    <code class="coffeescript">myList.parent().siblings().first().remove()</code>
-</pre>
-<p>
-<strong>With one exception:</strong> no parameters can be passed to the getter. IMO, this limitation actually provides semantic clarity: Because no parameters are possible, it&#39;s capabilities are simplified.
-</p>
-
-
-<p>A localized implementation displays this possibility:</p>
-
-</p>
-<pre>
-    <code class="html">&lt;div&gt;
-  &lt;a id=&quot;nested-child&quot;&gt;I&#39;m nested!&lt;/a&gt;
-&lt;/div&gt;</code>
-</pre>
-
-
-<pre>
-    <code class="coffeescript">Object.defineProperty $.fn, 'parentLink',
-  get: ->
-    @parent()
-
-$('#nested-child').parentLink.css 'background', 'blue'</code>
-</pre>
-
-<p>Properties can now be used to create complex connections between objects that make semantic sense.<p>
-
-<h4>New Consequence of Not Caching</h4>
-<p>One consequence that comes to mind with getter functions is that accessing a property is not equivalent to accessing a &ldquo;reference&rdquo; to the properties value:</p>
-<pre>
-    <code class="coffeescript">button.click ->
-  nestedChild.siblings.css 'background', 'blue'</code>
-</pre>
-
-<p>Will cause a DOM traversal to find the sibling nodes, while:</p>
-<pre>
-    <code class="coffeescript">siblings = nestedChild.siblings
-button.click ->
-  siblings.css 'background', 'blue'</code>
-</pre>
-<p>Will not. Formerly, these two statements were functionally equivalent.</p>
-
-
-<h3>Setters for Simple and Complex Inheritance</h3>
-
-<p>Setter are potentially useful to create expressive and declarative inheritance patterns. To illustrate this, consider the non-standard accessor property <span class="code">__proto__</span>. This property, now deprecated and likely to be replaced by the setter and getter methods of <span class="code">Object.setPrototypeOf</span> and <span class="code">Object.getPrototypeOf</span>, allows direct access to the the prototype of an object&#39;s constructor.</p>
-
-<p>Although it is not recommended, the prototype of an object can be changed by reassigning <span class="code">__proto__</span>. Internally, <a class="quote" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf">&ldquo;a very slow operation&rdquo;</a> occurs within the setter function to change the prototype.</p>
-<pre>
-    <code class="coffeescript">objectInstance.__proto__ = Object.create differentObject</code>
-</pre>
-
-<p>Extending upon this idea, setters can be used to create any number of dynamic &ldquo;assignments&rdquo;. Consider an inheritance pattern:</p>
-<pre>
-    <code class="coffeescript">a.inheritsFrom = b
-a.mixedWith = c
-a.mixedWith = d</code>
-</pre>
-
-<p>A simple example implementation:</p>
-<pre>
-    <code class="coffeescript">Object.defineProperty Object::, 'mixedWith',
-  set: (obj) ->
-    _.extend this, obj
-
-human = name: 'Taylor'
-
-musician = play: ->
-  alert 'A Symphony'
-
-human.mixedWith = musician</code>
-</pre>
-
-
-<p>Sequential assignments could operate similar to nested function invocations:</p>
-<pre>
-    <code class="coffeescript">a.inheritsFrom = b.clone.mixedWith = c</code>
-</pre>
-
-
-
-<h3>Accessor Properties for Testing Libraries</h3>
-
-<p>Libraries such as <a href="http://pivotal.github.io/jasmine/">Jasmine</a> aim to create the most readable and concise syntax for testing JavaScript. Accessor properties can help to reduce the architectural complexity of creating these libraries and to eliminate syntactic artifacts.</p>
-
-<p>Consider this rudimentary implementation of the toEqual method:</p>
-<pre>
-    <code class="coffeescript">testProtoInstance =
-  toEqual: (val) ->
-    return true  if @val is val #an object equality check
-    false
-
-  not:
-    toEqual: ->
-      not @toEqual.apply this, arguments
-
-expect = (val) ->
-  tester = Object.create testProtoInstance
-  tester.not.toEqual = tester.not.toEqual.bind tester
-  tester.val = val
-  tester</code>
-</pre>
-
-<pre>
-    <code class="coffeescript">console.log expect(5).toEqual 5 # true
-console.log expect(5).not.toEqual 5 # false</code>
-</pre>
-
-<p>The goal here is of course to allow the <span class="code">toEqual</span> method of the nested <span class="code">not</span> object to simply call the outer object&#39;s <span class="code">toEqual</span> method and negate the result. Unfortunately, this was not straightforward to achieve:</p>
-
-<p>The context of <span class="code">not.toEqual</span> upon invocation is the <span class="code">not</span> object. Therefore, in order to gain access to the instance from within <span class="code">not.toEqual</span>, we are forced to manually bind a new context through reassignment:</p>
-
-<pre>
-    <code class="coffeescript">tester.not.toEqual = tester.not.toEqual.bind tester</code>
-</pre>
-
-<p>Another solution is to create a closure that traps a reference to the instance as a private variable.</p>
-
-<pre>
-  <code class="coffeescript">testProtoInstance = (->
-  instance = undefined
-  toEqual: (val) ->
-    return true  if @val is val
-    false
-
-  not:
-    toEqual: ->
-      not instance.toEqual.apply instance, arguments
-
-  init: ->
-    instance = this
-)()
-
-expect = (val) ->
-  tester = Object.create testProtoInstance
-  tester.init() #trap a reference to the instance
-  tester.val = val
-  tester</code>
-</pre>
+	<pre>
+		<code class="coffeescript">resource().done @updateModel</code>
+	</pre>
 
 <p>
-In both cases, architectural simplicity was traded for syntactic and semantic simpicity.</p>
+	Therefore the intention of the developer in using events is simply to communicate from module A to module B that some method, i.e. <span class="code">A.updateModel</span> was invoked.
+</p>
+<h3>Enter Simple AOP Proxies</h3>
+<p>
+	Using a basic AOP proxy technique, we can unobtrusively modifying the behaviour of module A so that module B responds directly to the invocation of <span class="code">A.updateModel</span>.
+</p>
 
-<h3>Don&#39;t Make the Trade</h3>
+	<pre>
+		<code class="coffeescript">oldUpdateModel = A.updateModel
 
-<p>Fortunately we can define a getter for the <span class="code">not</span> property to retain the semantic clarity of a value property and the architectural simplicity of a method.</p>
+A.updateModel = ->
 
-<pre>
-  <code class="javascript">var testProtoInstance = {
-    state: true,
-    toEqual: function (val) {
-        if (this.val === val) {
-            return this.state;
-        }
-        return !this.state;
-    },
-    get not() {
-        this.state = !this.state;
-        return this;
-    }
-}, expect = function (val) {
-    var tester = Object.create(testProtoInstance);
-    tester.val = val;
-    return tester;
-};</code>
-</pre>
+	oldValue = oldUpdateModel.apply @, arguments
 
-<p>Unfortunately, coffeescript does not yet support the convenient accessor property syntax for prototypes.</p>
+	B.updateModel.apply @, arguments
 
-<p>Now that <span class="code">not</span> behaves like a method, I chose to create a flag property <span class="code">state</span> to indicate that the result of subsequent tests should be negated.<p>
+	oldValue
+
+</code>
+	</pre>
+
+<p>
+	Yet this convenience comes at a cost: The modules are no longer decoupled. A bridge between module A and module B now exists in one of module A&#39;s methods. In AOP terminology, the &ldquo;advice&rdquo; we have added to module A&#39;s method, is to invoke module B&#39;s method. Although the source code of module A is not modified, the advice still exists in the modules instance.
+</p>
+<h3>Proxy Pub-Sub Pattern</h3>
+<p>
+	Instead of adding advice to module A that couples the instance to module B, I suggest using AOP in a  &ldquo;pub-sub&rdquo; fashion, similar to events. Instead of publishing events to an events namespace,  &ldquo;publish&rdquo; and  &ldquo;subscribe&rdquo; methods to an events proxy object.
+</p>
+
+	<pre>
+		<code class="coffeescript">newDataReceived = new ProxyLinker
+
+newDataReceived.publish A.updateModel
+
+newDataReceived.subscribe B.updateModel</code>
+	</pre>
+
+<p>
+
+Because this pattern does not create any dependencies, the connections made with this &ldquo;linker&rdquo; should be contained in a separate file. This file can be discluded for unit testing of individual modules.
+</p>
+
+
+<p>
+	This pattern offers a few benefits:
+</p>
+<ul>
+	<li>Each of the modules can be developed independently, and later linked together.</li>
+	<li>Developers working on module A don&#39;t have to be aware that other modules rely on operations occuring in their module.</li>
+	<li>A stack trace will trace errors from the source to the error destination.</li>
+
+	<li>The source of the modules can remain uncluttered from subscriptions or publications.</li>
+	<li>Unit tests can be made while testing the entire application object by simply removing the linker file.</li>
+</ul>
+
+
+<p>I wrote this article in to elaborate on some of the ideas introduced in John Hann&#39;s article, <a href="http://know.cujojs.com/blog/oop-is-not-my-hammer">&ldquo;OOP is not my hammer&rdquo;</a>.</p>

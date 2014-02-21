@@ -67,8 +67,8 @@ window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch']) #maybe in
 
 	$http.get('json/blog.json')
 	.success (posts) ->
-		$scope.post = posts[$routeParams.postId]
-	
+		angular.forEach posts, (post) ->
+			$scope.post = post if parseInt($routeParams.postId) is post.id	
 
 .factory 'monitorScroll', ->
 	$w = $(window)
@@ -221,5 +221,5 @@ window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch']) #maybe in
 
 .filter 'reverse', ->
   (items) ->
-    items.slice().reverse()
+    items.slice().reverse() if items
 

@@ -14,6 +14,7 @@
             }
         ],
         "tags": [
+            "jQuery",
             "Backbone + Marionette",
             "Agile Development",
             "Jasmine",
@@ -69,6 +70,7 @@
         ],
         "tags": [
             "Angular JS",
+            "CoffeeScript",
             "Node",
             "Mongo DB",
             "Mongoose",
@@ -143,7 +145,8 @@
         "tags": [
             "Angular JS",
             "PHP PDO",
-            "mySQL"
+            "mySQL",
+            "jQuery"
         ]
     },
     {
@@ -173,7 +176,8 @@
         "tags": [
             "States.js",
             "PHP PDO",
-            "mySQL"
+            "mySQL",
+            "jQuery"
         ]
     },
     {
@@ -257,7 +261,8 @@
         "tags": [
             "States.js",
             "PHP PDO",
-            "mySQL"
+            "mySQL",
+            "jQuery"
         ]
     },
     {
@@ -308,7 +313,8 @@
         "tags": [
             "States.js",
             "PHP PDO",
-            "mySQL"
+            "mySQL",
+            "jQuery"
         ]
     },
     {

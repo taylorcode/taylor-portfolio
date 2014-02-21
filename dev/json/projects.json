@@ -68,6 +68,7 @@
                 "src": "view-my-resume.jpg"
             }
         ],
+        "github": "https://github.com/taylorcode/jobagrob",
         "tags": [
             "Angular JS",
             "CoffeeScript",

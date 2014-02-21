@@ -27,6 +27,7 @@
             <h3>{{p.title}}</h3>
             <p>{{p.content}}</p>
             <a ng-if="p.videos" ng-repeat="video in p.videos" ng-click="selectVideo(video.id)">{{video.link || 'Video Demo'}}</a>
+            <a ng-if="p.github" ng-href="{{p.github}}">{{'Github'}}</a>
         </section>
         <div tags="p.tags"></div>
     </article>

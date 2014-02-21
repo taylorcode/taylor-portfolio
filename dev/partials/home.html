@@ -33,7 +33,7 @@
 </div>
 <div id="blog" ng-controller="Blog">
     <h2>My Blog</h2>
-    <article ng-repeat="p in posts">
+    <article ng-repeat="p in posts | reverse">
         <h3><a ng-href="post/{{$index}}">{{p.title}}</a></h3>
         <p>{{p.description}}</p>
         <div tags="p.tags"></div>

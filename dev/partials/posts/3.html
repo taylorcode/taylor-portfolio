@@ -1,77 +1,44 @@
-AOP proxies as a replacement for internal callbacks
+<h3>Why Resize on the Client?</h3>
+ <p>
+ Some time ago I discovered that you could use <span class="code">canvas</span> to resize images client-side with JavaScript. Now, you may be thinking &ldquo;cool, but why would anyone want to do that?&rdquo;. It turns out, there are a number of good reasons. I'll list them in order of significance:
+ </p>
 
-Callbacks are messy.
+<ul>
+	<li><em>Network speeds are too slow</em><p>As network speeds increase, so does the resolution of the images we try to upload.
+</li>
+	<li><em>Servers are busy</em><p>Resizing images requires significant processing power. That same power could be allocated to database exchanges and template rendering&mdash;running your app.</p></li>
+	<li><em>Clients are fast</em><p>Smartphones have quad-core processors now. Your tablet is even faster. Take advantage of that!</p></li>
+</ul>
 
-What is a callback API? A convoluted peice of code.
+<h3>Early Attempts</h3>
 
-Every plugin should return a proxy object:
+<p>Back in the day (2012) after reading through the documentation for the fancy (new) File API and Canvas API, I finally produced a decent client-side image compressor and asynchronous file uploader.</p>
 
-var pluginInstance = $('#myElem').plugin();
+<p>Unfortunately, due to a few completely absurd &ldquo;bugs&rdquo; in IOS6 that squashed and flipped images over 1MB, I asked the stackoverflow community for some help: <a href="http://stackoverflow.com/questions/12539862/ios6-and-safari-photo-uploading-file-api-canvas-jquery-ajax-uploading-and">IOS6 and Safari Photo Uploading - File API + Canvas + jQuery Ajax Uploading and Resizing Files Asynchronously</a>.</p>
 
-var pluginProxy = proxy(pluginInstance);
+<p>Luckily someone named <a href="https://github.com/gokercebeci">Goker Cebeci</a> from Istanbul already created a jQuery plugin, tackling the squashing issue with a <a href="https://github.com/stomita/ios-imagefile-megapixel">mega pixel image rendering library for iOS6 Safari</a> and the orientation issue with <a href="https://github.com/jseidelin/exif-js">Exif.js</a>.</p>
 
-pluginProxy.after('onSwipeLeft', function (arguments) {
+<h3>The Quality Issue</h3>
+<p>I was pleasantly surprised with the result, but discouraged at the poor image quality that resulted from using canvas's context method <span class="code">drawImage</span> for mapping an image onto a canvas:
 
-});
+<pre>
+	<code class="coffeescript">ctx = canvas.getContext '2d'
+ctx.drawImage origImage 0 0 width height</code>
+</pre>
 
+<h3>Interpolation Algorithms FTW</h3>
 
-They introduce static into gravure because its hard to get the ink out of the highlight cells.
-  Surface area of ink rises up with static
-  Problem = occurs in bindery
+<p>After looking around the web and reading through some old notes on image compression from a class I took a few years ago, I discovered the reason the main reason for poor image-quality after resizing: interpolation. When you resize an image, you are mapping the pixels from the current resolution &ldquo;grid&rdquo;, onto another grid.</p>
+<p>Most of the issues that arise during an image downsize occur because of mathematical rounding errors in this mapping process. If the grids are not evenly divisible, the algorithm must approximate the interpolated pixel values.</p>
+<p>One obvious solution to this problem is to simply normalize the resize scaling factor so that the grids are always evenly divisible. Yet, this is clearly limiting. There are a number of algorithms that attempt to solve this problem: <a href="http://www.cambridgeincolour.com/tutorials/image-interpolation.htm">nearest-neighbor, billinear interpolation, bicubic interpolation, spline &amp; sync.</a></p>
 
-Fewer suppliers = less competition
+<h3>Use My Directive!</h3>
+<p>
+I had two goals when creating my most recent client-side image resizer: First, I wanted it to be an angular directive. Second, it needed to have fast, high quality image resizing comparable to Photoshop.</p>
 
-Lithography doens't care - because its all flat
+<p>Thanks to <a href="https://github.com/Mischi">Fabian Raetz</a> for creating the foundation for an <a href="https://github.com/Mischi/angularjs-imageupload-directive">angular image-resize directive</a>, and <a href="https://github.com/gamealchemist/">gamealchemist</a> for providing an excellent image resize algorithm in response to a <a href="http://stackoverflow.com/questions/18922880/html5-canvas-resize-downscale-image-high-quality">stackoverflow question</a>, I merged, refined, and birthed, the canvas-image-resize directive:</p>
 
-Acid
-  Make the cells bigger
-  Tape the area you don't want bigger
-
-CONS
-Fewer paper suppliers for gravure
-
-Physical location of plants
-  Most back east, in population centers
-  Reno is the closest one to us
-  Hard to put one in gravure - california laws
-
-Make ink less vicsious = decrease color
-  More viscous = more color slightly
-  Problem: Adjustment occurs globally
-
-Impression pressure - adjust color
-
-Angle of doctor blade - adjust angle - adjust amount of ink
-
-How is it a flying splice - bigger surface area - hope that it sticks to the web
-  
-Shorter length of runs on Gravure are becoming more common
-
-Gravure - Typically one wide web - divided up
-
-Why can you get greater shadows?
-  Gravure has a 3d image - better solid color
-  It dry traps
-    So you can put down more ink on top
-
-
-    Why reproduce better on crummy paper?
-      No water
-
-  Multiple heads - more engraving time
-    Every single head must be able to reproduce the same size cells
-    Don't want color variation across the page
-
-Gravure
-  Everything is screened
-
-  Gravure - not as good as lithography on highlights
-
-  Low-key images
-    Lots of shadows
-
-  Why do is black important
-    You print text
-    Make cells smaller - tighter together = jagged edge less visible
-
+<p>
+	<a href="https://github.com/taylorcode/angular-high-quality-image-resize-directive">Angular High Quality Image Resize Directive</a>
+</p>
 

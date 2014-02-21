@@ -219,4 +219,7 @@ window.portfolio = angular.module('portfolio', ['ngRoute', 'ngTouch']) #maybe in
 		delete @saved
 		return val
 
+.filter 'reverse', ->
+  (items) ->
+    items.slice().reverse()
 

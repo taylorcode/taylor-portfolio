@@ -13,5 +13,10 @@
         "title": "A Useful Factory Construction Pattern Using Object Specifiers and Currying",
         "description": "Limit the parameters your methods have access to by currying. A useful pattern I picked up while perusing some of the Angular JS source code.",
         "tags": ["Object Specifiers", "Currying"]
+    },
+    {
+        "title": "Creating an Angular Image Resize Directive with Photoshop Quality Using Canvas",
+        "description": "Reduce the burden of slow networks on the performance of your application, take the responsibility of image downsizing off of your server.",
+        "tags": ["Canvas", "Angular Directives", "Image Resize Algorithm"]
     }
 ]

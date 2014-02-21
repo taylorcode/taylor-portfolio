@@ -28,7 +28,7 @@ ctx.drawImage origImage 0 0 width height</code>
 
 <h3>Interpolation Algorithms FTW</h3>
 
-<p>After looking around the web and reading through some old notes on image compression from a class I took a few years ago, I discovered the reason the main reason for poor image-quality after resizing: interpolation. When you resize an image, you are mapping the pixels from the current resolution &ldquo;grid&rdquo;, onto another grid.</p>
+<p>After looking around the web and reading through some old notes on image compression from a class I took a few years ago, I discovered the main reason for poor image-quality after resizing: interpolation. When you resize an image, you are mapping the pixels from the current resolution &ldquo;grid&rdquo;, onto another grid.</p>
 <p>Most of the issues that arise during an image downsize occur because of mathematical rounding errors in this mapping process. If the grids are not evenly divisible, the algorithm must approximate the interpolated pixel values.</p>
 <p>One obvious solution to this problem is to simply normalize the resize scaling factor so that the grids are always evenly divisible. Yet, this is clearly limiting. There are a number of algorithms that attempt to solve this problem: <a href="http://www.cambridgeincolour.com/tutorials/image-interpolation.htm">nearest-neighbor, billinear interpolation, bicubic interpolation, spline &amp; sync.</a></p>
 
